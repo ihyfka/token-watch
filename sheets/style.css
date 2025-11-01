@@ -1,49 +1,103 @@
+html{font-size:62.5%;}
 *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 :root{
-  --bg: #000000;
-  --sidebar-bg: #151617;
-  --maintext: 
-  --activetheme: #FAE529;
-  --bullish: #2DC24E;
-  --bearish: #F92C2C;
-  --watched: #F1CF24;
+  --heading:"Raleway", Arial;
+  --maintext:Verdana, sans-serif;
+  --sectext:Helvetica, serif;
+  --bg:#000000;
+  --sidebar-bg:#15161767;
+  --activetheme:#FAE529;
+  --theme-bg:#1A1A1A;
+  --bullish:#2DC24E;
+  --bearish:#F92C2C;
+  --watched:#F1CF24;
 }
 body{
-  color: #fff;
-  background: #000;
+  background:var(--bg);
 }
 #container{
-  display: grid;
-  grid-template-columns: minmax(18%, auto) minmax(auto, 80%);
-  gap: 2%;
-  height: 100vh;
-  width: 100%;
+  display:grid;
+  grid-template-columns:minmax(18%, auto) minmax(auto, 80%);
+  gap:2%;
+  height:100vh;
+  width:100%;
 }
 #sidebar{
-  display: flex;
-  flex-direction: column;
-  padding:;
-  background: var(--sidebar-bg);
+  display:flex;
+  flex-direction:column;
+  padding:2rem 3rem 4rem 1.9rem;
+  background:var(--sidebar-bg);
+}
+.siteblock{
+  display:flex;
+  flex-wrap:nowrap;
+  margin-bottom:30%;
+}
+#sitename{
+  font-family:var(--heading);
+  font-weight:600;
+  font-size:2rem;
+  color:pink;
 }
 #nav-tabs{
   flex:1;
+  font-family:var(--maintext);
 }
 .tab{
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  margin-bottom:3rem;
+  color:#bbb;
+  transition: scale .25s;
 }
+.tab:hover{
+  scale:1.1;
+}
+.tab-svg{
+  min-width:17px;
+  min-height:17px;
+  margin-right:1rem;
+} 
+.nav-tab-span{
+  font-size:1.3rem;
+}
+
+
+/*selected tab*/
+.current{
+  padding:1rem 3rem 1rem .7rem;
+  border: 2px solid GREEN;
+  border-radius:25px;
+  color:#000;
+  background:#fff;
+}
+.current svg{
+  fill:#000;
+}
+/*selected tab end*/
+
+
 #theme{
-  display: flex;
-
+  display:flex;
+  width:min-content;
+  border-radius:30px;
+  background:var(--theme-bg);
+}
+.light-theme, .dark-theme{
+  padding:1rem;
+  border-radius:inherit;
 }
 
-
-svg, path{
-  fill: red;
-  stroke: red;
+/*hteme switch*/
+.selected-theme{
+  background:#FAE529;
 }
+.selected-theme path{
+  fill:#000;
+}
+/*light theme end*/
