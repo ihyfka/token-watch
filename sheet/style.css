@@ -354,6 +354,46 @@ nav{
   font-style:none;
   font-size:1.4rem;
 }
+.new-content{
+  display:flex;
+  justify-self:center;
+  align-items:center;
+  margin-top:2rem;
+  padding:1rem;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  background:var(--sidebar-bg);
+  cursor:pointer;
+}
+.new-content:hover{
+  background:var(--modal-bg);
+}
+.new-content span{
+  white-space:nowrap;
+  font-size:1.7rem;
+  font-family:var(--sectext);
+  margin-right:5%;
+}
+.refresh-load{
+  animation: refreshing 1s infinite forwards ease;
+}
+@keyframes refreshing{
+  from{
+    transform:rotate(0);
+  }to{
+    transform:rotate(359deg);
+  }
+  
+}
+
+
+
+
+
+
+
+
 
 
 /*MOBILE SCREEN SIZE*/
