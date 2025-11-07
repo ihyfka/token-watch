@@ -12,15 +12,15 @@ const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quot
 const newsApi = "https://newsapi.org/v2/everything?q=cryptocurrency&pageSize=8&apiKey=d178932bab63474990cb05527e197ba8";
 
 const newsDataAPI = "https://newsdata.io/api/1/crypto?q=coin&language=en&apikey=pub_d06190c1d4ed41f49ca89fbe2652b219";
-searchBtn.addEventListener("click",()=>{
+/*searchBtn.addEventListener("click",()=>{
 fetch(newsDataAPI)
 .then(res=>res.json())
 .then(data=>console.log(data))
 .catch(err=>console.log(err))
-})
+})*/
 
 const newsDiv = document.querySelector(".news");
-async function fetchCryptoNews(){
+async function fetchCryptoNews(){ //News
   try{
     const res = await fetch(newsDataAPI);
     const data = await res.json();
@@ -57,7 +57,6 @@ async function fetchCryptoNews(){
     console.log(err);
   }
 }
-
 
 fetchCryptoNews();
 
