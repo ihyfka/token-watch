@@ -1,0 +1,37 @@
+html{font-size:62.5%;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+:root{
+  --heading:"Raleway", Arial;
+  --maintext:Verdana, sans-serif;
+  --sectext:Helvetica, serif;
+  --bg:#000;
+  --default-color:#FFF;
+  --last-updated:#EEFFEECC;
+  --modal-bg:#373839AA;
+  --sidebar-bg:#37383957;
+  --activetheme:#FAE529;
+  --theme-bg:#1A1A1A;
+  --bullish:#2DC24E;
+  --bearish:#F92C2C;
+  --watched:#F1CF24;
+  --err-msg:#FFC0CB;
+  --tab-color:#CCC;
+}
+.light{
+  --bg:#FFF;
+  --default-color:#1A1A1A;
+  --last-updated:#EEF9EE;
+  --modal-bg:#F7F7F7E6;
+  --sidebar-bg:#F0F0F0;
+  --activetheme:#FAD929;
+  --theme-bg:#FAFAFA;
+  --bullish:#28A745;
+  --bearish:#E63946;
+  --watched:#FFD43B;
+  --err-msg:#FF6B81;
+  --tab-color:#555;
+}
