@@ -22,11 +22,8 @@ const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quot
 const theme = document.querySelectorAll(".theme");
 const lightIcon = document.querySelector(".light-theme");
 const darkIcon = document.querySelector(".dark-theme");
-//const navTheme = document.querySelector(".nav-theme");
 const navLight = document.querySelector(".nav-light");
 const navDark = document.querySelector(".nav-dark");
-
-
 let getDarkmode = localStorage.getItem("darkMode");
 function launchDarkMode(){
   localStorage.setItem("darkMode", "true");
@@ -51,6 +48,44 @@ for(let i=0;i<theme.length;i++){
     getDarkmode !== "true" ? launchDarkMode(): launchLightMode();
   })
 }
+
+
+//SEARCH
+
+// searchBtn.addEventListener("click",()=>{
+//   let innit = searchbar.value;
+//   fetch(`${cd_url}search_string=${innit}&limit=10`,{
+//     method:"GET",
+//     headers:{
+//       "Authorization": `Bearer ${cd_apiKey}`,
+//       "Content-Type": "application.json"
+//     }
+//   })
+//   .then((res)=>res.json())
+//   .then((data)=>console.log(data))
+//   .catch((err)=>console.log(err))
+// })
+
+
+
+// const navEntry = document.querySelector("#nav-entry");
+// console.log(navEntry.querySelector("input"))
+// navEntry.addEventListener("click", (e)=>{
+//   if(e.target.contains(navEntry.querySelector("input"))){
+//     //(navEntry.querySelector("input")).style.display = "inline-block";
+//     //searchBtn.style.display = "100%";
+//     console.log("input hit")
+//   }else{
+//     console.log("target not found")
+//   }
+// })
+
+
+
+
+
+
+
 
 
 
@@ -78,6 +113,56 @@ function notUpdatedInfo(){
   lastUpdated.textContent = "Updated *** **";
 }
 navigator.onLine ? updatedInfo(): notUpdatedInfo();
+
+
+
+const trendingDiv = document.querySelector(".trending-block")
+async function getTrending(){
+  try{
+    const res = await fetch("https://api.coinranking.com/v2/coins/trending?timePeriod=3h&limit=4&tiers[]=1&tiers[]=2", {
+      headers:{
+      'x-access-token': 'coinranking86f7f6b674c68d00e691f169dcf49d8fa5df15aafd2476a2',
+      }
+    })
+    if(!res.ok){
+      throw new Error(`HTTP error! status code: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log(data);
+    data.data.coins.forEach((item, index)=>{
+      topTrending = document.createElement("div");
+      numSpan = document.createElement("span");
+      trendingTokenImg = document.createElement("img");
+      tokName = document.createElement("span");
+      tokSymbol = document.createElement("span");
+      trendingTokenVchange = document.createElement("div");
+      topTrending.classList.add("top-trending");
+      numSpan.classList.add("num");
+      numSpan.textContent = index + 1;
+      trendingTokenImg.src = data.data.coins[index].iconUrl || "./resources/images/general-purpose-cover.png";
+      tokName.classList.add("token-name");
+      tokName.textContent = data.data.coins[index].name;
+      tokSymbol.classList.add("token-symbol");
+      tokSymbol.textContent = data.data.coins[index].symbol;
+      trendingTokenVchange.classList.add("token-value");
+      trendingTokenVchange.textContent = data.data.coins[index].change + "%";
+      if(Math.sign(data.data.coins[index].change) === 1){
+        trendingTokenVchange.style.color = "var(--bullish)";
+      }else{
+        trendingTokenVchange.style.color = "var(--bearish)";
+      }
+      topTrending.append(numSpan, trendingTokenImg, tokName, tokSymbol, trendingTokenVchange);
+      trendingDiv.append(topTrending);
+    })
+
+  } catch(err){
+    console.log(err)
+  }
+}
+getTrending();
+
+
+
 
 
 //TOP COINS
@@ -190,12 +275,11 @@ async function fetchCryptoNews(){
     //console.log(err);
   }
 }
-fetchCryptoNews();
+//fetchCryptoNews();
 
 
 //REFRESH BUTTON
 refreshBtn.addEventListener("click", ()=>{
-  
   newsDiv.innerHTML = "";
   refreshBtn.querySelector("span").textContent = "Refreshing...";
   refreshBtn.querySelector(".refresh-icon").classList.add("refresh-load");
@@ -211,33 +295,22 @@ refreshBtn.addEventListener("click", ()=>{
 
 
 
-//     WITH AUTHENTICATION
-// searchBtn.addEventListener("click",()=>{
-//   let innit = searchbar.value;
-//   fetch(`${cd_url}search_string=${innit}&limit=4`,{
-//     method:"GET",
-//     headers:{
-//       "Authorization": `Bearer ${cd_apiKey}`,
-//       "Content-Type": "application.json"
-//     }
-//   })
-//   .then((res)=>res.json())
-//   .then((data)=>console.log(data))
-//   .catch((err)=>console.log(err))
-// })
 
 
 
-// searchBtn.addEventListener("click",()=>{
-//   fetch(`https://api.coinlore.com/api/tickers/?start=0&limit=10`)
-//   .then(response => response.json())
-//   .then(data => console.log(data))
-// fetch(cryptoQuotes)
-// .then(res=>res.json())
-// .then(data=>console.log(data))
-// .catch(err=>console.log(err))
-// fetchCryptoNews();
-// })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // const lazyCoins = setInterval(()=>{
