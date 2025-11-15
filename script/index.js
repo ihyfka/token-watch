@@ -402,7 +402,7 @@ refreshBtn.addEventListener("click", ()=>{
   newsDiv.innerHTML = "";
   refreshBtn.querySelector("span").textContent = "Refreshing...";
   refreshBtn.querySelector(".refresh-icon").classList.add("refresh-load");
-  fetchCryptoNews();
+  cryptoNews();
   setTimeout(()=>{
     refreshBtn.querySelector("span").textContent = "Refresh";
     refreshBtn.querySelector(".refresh-icon").classList.remove("refresh-load");
