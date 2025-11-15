@@ -115,53 +115,151 @@ function notUpdatedInfo(){
 navigator.onLine ? updatedInfo(): notUpdatedInfo();
 
 
-
-const trendingDiv = document.querySelector(".trending-block")
-async function getTrending(){
+//GLOBAL METRICS
+async function getGlobalMetric(){
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const timeoutId = setTimeout(()=>{
+    controller.abort()
+  }, 5000)
   try{
-    const res = await fetch("https://api.coinranking.com/v2/coins/trending?timePeriod=3h&limit=4&tiers[]=1&tiers[]=2", {
+    const url = 'https://cryptocurrency-markets.p.rapidapi.com/v1/crypto/modules?module=global_matric';
+    const options = {
+	    method: 'GET',
+	    headers:{
+		    'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
+		    'x-rapidapi-host': 'cryptocurrency-markets.p.rapidapi.com'
+	    }
+    };
+	  const res = await fetch(url, options, {signal});
+	  const data = await res.json();
+	  console.log(data);
+  }catch (error) {
+	  console.error(error); 
+  }
+}
+searchBtn.addEventListener("click", getGlobalMetric);
+
+
+
+
+
+
+
+
+
+
+
+//TRENDING COINS
+const trendingDiv = document.querySelector(".trending-block");
+async function getTrending(){
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const timeoutId = setTimeout(()=>{
+    controller.abort()
+  }, 5000)
+  try{
+    const res = await fetch("https://api.coinranking.com/v2/coins/trending?timePeriod=1h&limit=4&tiers[]=2&tiers[]=3", {
       headers:{
       'x-access-token': 'coinranking86f7f6b674c68d00e691f169dcf49d8fa5df15aafd2476a2',
       }
-    })
+    }, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
-    }
-    const data = await res.json();
-    console.log(data);
-    data.data.coins.forEach((item, index)=>{
-      topTrending = document.createElement("div");
-      numSpan = document.createElement("span");
-      trendingTokenImg = document.createElement("img");
-      tokName = document.createElement("span");
-      tokSymbol = document.createElement("span");
-      trendingTokenVchange = document.createElement("div");
-      topTrending.classList.add("top-trending");
-      numSpan.classList.add("num");
-      numSpan.textContent = index + 1;
-      trendingTokenImg.src = data.data.coins[index].iconUrl || "./resources/images/general-purpose-cover.png";
-      tokName.classList.add("token-name");
-      tokName.textContent = data.data.coins[index].name;
-      tokSymbol.classList.add("token-symbol");
-      tokSymbol.textContent = data.data.coins[index].symbol;
-      trendingTokenVchange.classList.add("token-value");
-      trendingTokenVchange.textContent = data.data.coins[index].change + "%";
-      if(Math.sign(data.data.coins[index].change) === 1){
-        trendingTokenVchange.style.color = "var(--bullish)";
-      }else{
-        trendingTokenVchange.style.color = "var(--bearish)";
-      }
+    }else{
+      const data = await res.json();
+      console.log(data);
+      data.data.coins.forEach((item, index)=>{
+        const topTrending = document.createElement("div");
+        numSpan = document.createElement("span");
+        trendingTokenImg = document.createElement("img");
+        tokName = document.createElement("span");
+        tokSymbol = document.createElement("span");
+        trendingTokenVchange = document.createElement("div");
+        topTrending.classList.add("top-trending");
+        numSpan.classList.add("num");
+        numSpan.textContent = index + 1;
+        trendingTokenImg.src = data.data.coins[index].iconUrl || "./resources/images/general-purpose-cover.png";
+        tokName.classList.add("token-name");
+        tokName.textContent = data.data.coins[index].name;
+        tokSymbol.classList.add("token-symbol");
+        tokSymbol.textContent = data.data.coins[index].symbol;
+        trendingTokenVchange.classList.add("token-value");
+        trendingTokenVchange.textContent = data.data.coins[index].change + "%";
+        if(Math.sign(data.data.coins[index].change) === 1){
+          trendingTokenVchange.style.color = "var(--bullish)";
+        }else{
+          trendingTokenVchange.style.color = "var(--bearish)";
+        }
       topTrending.append(numSpan, trendingTokenImg, tokName, tokSymbol, trendingTokenVchange);
       trendingDiv.append(topTrending);
-    })
-
-  } catch(err){
+      })
+    }
+  }catch(err){
+    clearTimeout(timeoutId);
+    const fragment = document.createDocumentFragment();
+    for(let i=0;i<3;i++){
+      const lazyTrendingBox = document.createElement("div");
+      lazyTrendingBox.classList.add("lazy");
+      fragment.append(lazyTrendingBox);   
+    }
+    trendingDiv.append(fragment);
     console.log(err)
   }
 }
-getTrending();
+//getTrending();
 
 
+//RECENTLY ADDED COINS
+// async function raCoins(){
+// //   // const controller = new AbortController();
+// //   // const signal = controller.signal;
+// //   // const timeoutId = setTimeout(()=>{
+// //   //   controller.abort()
+// //   // }, 5000)
+// //       const url = 'https://crypto-tracker.p.rapidapi.com/api/recentlyadded';
+// //     const options = {
+// // 	    method: 'GET',
+// // 	    headers: {
+// // 		  'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
+// // 		  'x-rapidapi-host': 'crypto-tracker.p.rapidapi.com'
+// // 	    }
+// //     }
+// //   try{
+
+// //     const res = await fetch(url, options);
+// //     if(!res.ok){
+// //       throw new Error(`HTTP error! status code: ${res.status}`);
+// //     }
+// // 	  const data = await res.json();//res.text();
+// // 	  console.log(data)
+// //     data.result.forEach((item, index)=>{
+
+// //     })
+// //   }catch(err){
+// //     console.log(err)
+// //   }
+// // const url = 'https://cryptopricesapi-by-xcrypto.p.rapidapi.com/';
+// // const options = {
+// // 	method: 'GET',
+// // 	headers: {
+// // 		'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
+// // 		'x-rapidapi-host': 'cryptopricesapi-by-xcrypto.p.rapidapi.com'
+// // 	}
+// // };
+
+// // try {
+// // 	const response = await fetch(url, options);
+// // 	const result = await response.text();
+// // 	console.log(result);
+// // } catch (error) {
+// // 	console.error(error);
+// // }
+
+
+
+// }
+// // searchBtn.addEventListener("click", raCoins)
 
 
 
@@ -217,8 +315,7 @@ getTopCoins();
 
 //NEWS
 const newsDiv = document.querySelector(".news");
-//const tNewsDiv = document.querySelector("#trending-news");
-async function fetchCryptoNews(){
+async function cryptoNews(){
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -263,8 +360,6 @@ async function fetchCryptoNews(){
       articleDivChild2.append(artTitle, artDesc, published);
       article.append(auth, articleDivChild2);
       newsDiv.append(article);
-      //newsDiv.innerHTML = "";
-      //tNewsDiv.append(article);
     })
   }catch(err){
     clearTimeout(timeoutId);
@@ -275,7 +370,7 @@ async function fetchCryptoNews(){
     //console.log(err);
   }
 }
-//fetchCryptoNews();
+//cryptoNews();
 
 
 //REFRESH BUTTON

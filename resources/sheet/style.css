@@ -10,7 +10,7 @@ html{
   --heading:"Raleway", Arial;
   --maintext:Verdana, sans-serif;
   --sectext:Helvetica, serif;
-  --bg:#000;
+  --bg:#000000FE;
   --default-color:#FFF;
   --search-bg:#464746;
   --last-updated:#EEFFEECC;
@@ -18,6 +18,7 @@ html{
   --sidebar-bg:#37383957;
   --activetheme:#FAE529DD;
   --modal-sec:#7EF598D5;
+  --modal-sec-w:#EEFFEE;
   --token-symbol:#888877CC;
   --theme-bg:#1A1A1A;
   --bullish:#2DC24E;
@@ -29,7 +30,7 @@ html{
   --article-desc:#DDD;
 }
  .light{
-  --bg:#FFF;
+  --bg:#FFFE;
   --default-color:#1A1A1A;
   --search-bg:#F0F0F0;
   --last-updated:#335533;
@@ -37,6 +38,7 @@ html{
   --sidebar-bg:#F0F0F0;
   --activetheme:#FADB29CD;
   --modal-sec:#335533;
+  --modal-sec-w:#335533;
   --token-symbol:#777766CC;
   --theme-bg:#FAFAFA;
   --bullish:#28A745;
@@ -150,7 +152,7 @@ body{
 .nav-theme{
   display:none;
 }
-.light-theme{
+.dark-theme{
   display:none;
 }
 .light-theme, .dark-theme{
@@ -160,9 +162,6 @@ body{
 .selected-theme{
   background:var(--activetheme);
 }
-/* .selected-theme path{
-  fill:var(--bg); 
-} */
 .main{
   padding:1rem 1.5rem 2rem;
   color:var(--default-color);
@@ -217,7 +216,6 @@ nav{
 .mb-search{
   position:absolute;
   background:red;
-  padding:;
 }
 .nav-notif{
   margin-right:1%;
@@ -257,7 +255,7 @@ nav{
   grid-template-columns:minmax(auto, 10rem) auto;
   gap:3%;
   padding:0 1rem 0;
-  width:100%;
+  
   margin-bottom:5rem;
 }
 .daily-mc, .fg-sentiment{
@@ -321,7 +319,9 @@ nav{
   background:var(--sidebar-bg);
   box-shadow:0 0 1px 2px var(--border-color);
 }
-
+.trending-block .lazy:nth-child(2){
+  margin-top:1.3rem;
+}
 .block-head{
   display:flex;
   align-items:center;
@@ -330,12 +330,11 @@ nav{
   font-family:var(--maintext);
   font-size:1.9rem;
   flex:1;
-  margin-bottom:1.3rem;
 }
 .modal-secondary{
   font-family:var(--sectext);
   font-size:1.3rem;
-  color:var(--modal-sec);
+  color:var(--modal-sec-w);
 }
 .top-trending, .top-ra{
   display:flex;
@@ -343,6 +342,7 @@ nav{
   align-content:center;
   align-items:center;
   width:100%;
+  max-height:5rem;
   margin-bottom:.7rem;
   padding:1.3rem 1rem 1.3rem;
   border-radius:25px;
@@ -350,6 +350,9 @@ nav{
   font-size:1.5rem;
   font-family:var(--sectext);
   background:var(--modal-bg);
+}
+.top-trending:nth-child(2), .top-ra:nth-child(2){
+  margin-top:1.3rem;
 }
 .num, .top-trending img, .top-ra img, .token-name{
   margin-right:7px;
@@ -363,10 +366,6 @@ nav{
   width:2rem;
   border-radius:50%;
 }
-
-/*.trending-block*/ #today-overview .value-point{color:var(--bearish);}
-/*.recently-added-block*/ #today-overview .token-value{color:var(--bullish);}
-
 .token-symbol{
   margin-right:1rem;
   font-size:1.2rem;
@@ -411,20 +410,29 @@ nav{
   background:var(--sidebar-bg);
 }
 .lazy{
+  margin-bottom:.7rem;
   width:100%;
-  height:100%;
+  height:4.6rem;
   border:none;
   border-radius:inherit;
+  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 18%, var(--modal-bg) 33%);
+  background-size:200% 100%;
   animation: shimmer 2.5s infinite ease;
 }
 @keyframes shimmer{
-  0%{
+  from{
+    background-position:-120% 0;
+  }to{
+    background-position:120% 0;
+  }
+
+  /* 0%{
     background:var(--sidebar-bg);
   }50%{
     background:var(--modal-bg);
   }100%{
     background:var(--sidebar-bg);
-  }
+  } */
 }
 .topcoins-box img{
   height:40px;
@@ -493,6 +501,8 @@ nav{
   border-radius:10px;
 }
 .article div:nth-child(2){
+  max-width:100%;
+  overflow:hidden;
   font-style:italic;
 }
 .article-title{
