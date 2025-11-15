@@ -134,7 +134,6 @@ async function getGlobalMetric(){
     };
 	  const res = await fetch(url, options, {signal});
 	  const data = await res.json();
-
 	  const mcDaily = document.createElement("div");
     mcDaily.classList.add("daily-mc");
     mcDaily.setAttribute("title", "The total value of all outstanding shares or cryptocurrency coins in circulation.");
@@ -143,20 +142,24 @@ async function getGlobalMetric(){
     commonMrktHeaderMC.textContent = "Market cap";
     const mcValue = document.createElement("span");
     mcValue.classList.add("mc-value");
-    mcValue.textContent = (Math.round((data.body.market_cap) *100) /100) + "T";
+    mcValue.textContent = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      notation: "compact",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format((Math.round((data.body.market_cap) *100) /100));
     const mcChange = document.createElement("p");
     mcChange.classList.add("mc-change");
     mcChange.textContent = (Math.round((data.body.market_cap_change) *100) /100) + "%";
-    const mcChangeUp = `<svg class="mc-up" fill="var(--bullish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"/></svg>`;
-    const mcChangeDown = `<svg class="mc-down" fill="var(--bearish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"/></svg>`;
+    const mcChangeUp = `<svg fill="var(--bullish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"/></svg>`;
+    const mcChangeDown = `<svg fill="var(--bearish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"/></svg>`;
     if(Math.sign((Math.round((data.body.market_cap_change) *100) /100)) === 1){
       mcChange.style.color = "var(--bullish)";
-      mcChangeUp.style.display = "inlineBlock";
-      mcChange.append(mcChangeUp);
+      mcChange.innerHTML += mcChangeUp;
     }else{
       mcChange.style.color = "var(--bearish)";
-      mcChangeUp.style.display = "inlineBlock";
-      mcChange.append(mcChangeDown);
+      mcChange.innerHTML += mcChangeDown;
     }
   mcDaily.append(commonMrktHeaderMC, mcValue, mcChange);
     const mrktDom = document.createElement("div");
@@ -167,16 +170,17 @@ async function getGlobalMetric(){
     commonMrktHeaderMD.textContent = "Dominance";
     const btcDom = document.createElement("span");
     btcDom.classList.add("btc-dom");
-    btcDom.textContent = (Math.round((data.body.btc_dominance) *100) /100)
+    btcDom.textContent = `BTC:   ${(Math.round((data.body.btc_dominance) *100) /100)}%`;
     const ethDom = document.createElement("span");
     ethDom.classList.add("eth-dom");
-    ethDom.textContent = (Math.round((data.body.eth_dominance) *100) /100)
+    ethDom.textContent = `ETH:   ${(Math.round((data.body.eth_dominance) *100) /100)}%`;
   mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
     const fgSentiment = document.createElement("div");
     fgSentiment.classList.add("fg-sentiment");
     fgSentiment.setAttribute("title", "The Index registers investor sentiment on a 0 (extreme fear) to 100 (extreme greed) scale.");
     const commonMrktHeaderFG = document.createElement("span");
     commonMrktHeaderFG.classList.add("mrkt-sentiment-header");
+    commonMrktHeaderFG.textContent = "Fear & Greed";
     const fgInfo = document.createElement("div");
     fgInfo.classList.add("fear-greed-info");
     const fgImgDiv = document.createElement("div");
@@ -190,7 +194,7 @@ async function getGlobalMetric(){
         fill="var(--default-color)" transform="translate(384,187)"/>
       </svg>
     `;
-    fgImgDiv.append(fgSvg);
+    fgImgDiv.innerHTML += fgSvg;
     const fgValue = document.createElement("div");
     fgValue.classList.add("fear-greed-value");
     const fgNum = document.createElement("span");
@@ -277,60 +281,10 @@ async function getTrending(){
     console.log(err)
   }
 }
-//getTrending();
+getTrending();
 
 
 //RECENTLY ADDED COINS
-// async function raCoins(){
-// //   // const controller = new AbortController();
-// //   // const signal = controller.signal;
-// //   // const timeoutId = setTimeout(()=>{
-// //   //   controller.abort()
-// //   // }, 5000)
-// //       const url = 'https://crypto-tracker.p.rapidapi.com/api/recentlyadded';
-// //     const options = {
-// // 	    method: 'GET',
-// // 	    headers: {
-// // 		  'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
-// // 		  'x-rapidapi-host': 'crypto-tracker.p.rapidapi.com'
-// // 	    }
-// //     }
-// //   try{
-
-// //     const res = await fetch(url, options);
-// //     if(!res.ok){
-// //       throw new Error(`HTTP error! status code: ${res.status}`);
-// //     }
-// // 	  const data = await res.json();//res.text();
-// // 	  console.log(data)
-// //     data.result.forEach((item, index)=>{
-
-// //     })
-// //   }catch(err){
-// //     console.log(err)
-// //   }
-// // const url = 'https://cryptopricesapi-by-xcrypto.p.rapidapi.com/';
-// // const options = {
-// // 	method: 'GET',
-// // 	headers: {
-// // 		'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
-// // 		'x-rapidapi-host': 'cryptopricesapi-by-xcrypto.p.rapidapi.com'
-// // 	}
-// // };
-
-// // try {
-// // 	const response = await fetch(url, options);
-// // 	const result = await response.text();
-// // 	console.log(result);
-// // } catch (error) {
-// // 	console.error(error);
-// // }
-
-
-
-// }
-// // searchBtn.addEventListener("click", raCoins)
-
 
 
 //TOP COINS
@@ -440,7 +394,7 @@ async function cryptoNews(){
     //console.log(err);
   }
 }
-//cryptoNews();
+cryptoNews();
 
 
 //REFRESH BUTTON
@@ -467,39 +421,53 @@ refreshBtn.addEventListener("click", ()=>{
 
 
 
+// async function raCoins(){
+// //   // const controller = new AbortController();
+// //   // const signal = controller.signal;
+// //   // const timeoutId = setTimeout(()=>{
+// //   //   controller.abort()
+// //   // }, 5000)
+// //       const url = 'https://crypto-tracker.p.rapidapi.com/api/recentlyadded';
+// //     const options = {
+// // 	    method: 'GET',
+// // 	    headers: {
+// // 		  'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
+// // 		  'x-rapidapi-host': 'crypto-tracker.p.rapidapi.com'
+// // 	    }
+// //     }
+// //   try{
 
+// //     const res = await fetch(url, options);
+// //     if(!res.ok){
+// //       throw new Error(`HTTP error! status code: ${res.status}`);
+// //     }
+// // 	  const data = await res.json();//res.text();
+// // 	  console.log(data)
+// //     data.result.forEach((item, index)=>{
 
+// //     })
+// //   }catch(err){
+// //     console.log(err)
+// //   }
+// // const url = 'https://cryptopricesapi-by-xcrypto.p.rapidapi.com/';
+// // const options = {
+// // 	method: 'GET',
+// // 	headers: {
+// // 		'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
+// // 		'x-rapidapi-host': 'cryptopricesapi-by-xcrypto.p.rapidapi.com'
+// // 	}
+// // };
 
+// // try {
+// // 	const response = await fetch(url, options);
+// // 	const result = await response.text();
+// // 	console.log(result);
+// // } catch (error) {
+// // 	console.error(error);
+// // }
 
-
-
-
-
-
-
-
-// const lazyCoins = setInterval(()=>{
-//   const fragment = document.createDocumentFragment();
-//   for(let i=0;i<10;i++){
-//     const topCoinsBox = document.createElement("div");
-//     topCoinsBox.classList.add("topcoins-box");
-//     const tcInput = document.createElement("div");
-//     tcInput.classList.add("lazy");
-//     topCoinsBox.append(tcInput);
-//     fragment.append(topCoinsBox);  
-//   }
-//   topCoinsBoxesBox.append(fragment);
-// },30000)
-
-
-// function checkErr(){
-//   if(topCoinsBoxesBox.contains(fetchErr)){
-//    console.log("button is clicked and errbox is visible");
-// }else{
-//   console.log("button is not clicked and errbox is invisible");
 // }
-// }
-
+// // searchBtn.addEventListener("click", raCoins)
 
 
 
