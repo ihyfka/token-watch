@@ -10,10 +10,11 @@ html{
   --heading:"Raleway", Arial;
   --maintext:Verdana, sans-serif;
   --sectext:Helvetica, serif;
-  --bg:#00000FFE;
+  --bg:#00000CFE;
   --default-color:#FFF;
   --search-bg:#464746;
-  --search-res:#090A16;
+  --search-res:#0a0a14;
+  --srch-ans:#37383957;
   --last-updated:#EEFFEECC;
   --modal-bg:#37383988;
   --sidebar-bg:#37383957;
@@ -35,6 +36,7 @@ html{
   --default-color:#1A1A1A;
   --search-bg:#F0F0F0;
   --search-res:#EBEBEC;
+  --srch-ans:#DBDBDB;
   --last-updated:#335533;
   --modal-bg:#DBDBDB;/*FDFDFD*/
   --sidebar-bg:#F0F0F0;
@@ -53,13 +55,23 @@ html{
 } 
 body{
   background:var(--bg);
+  height:100vh;
 }
 .container{
+  position:relative;
   display:grid;
   /* grid-template-columns:15% 85%; */
   grid-template-columns:100%;
-  min-height:100vh;
+  height:100vh;
   max-width:100%;
+}
+#overlay{
+  display:none;
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100vh;
+  background:#0005;
 }
 #sidebar{
   /* display:flex; */
@@ -203,7 +215,6 @@ nav{
   position:fixed;
   top:1.5%;
   left:39%;
-  /* display:flex; */
   display:none;
   flex-direction:column;
   border-radius:25px;
@@ -212,6 +223,9 @@ nav{
   color:white;
   padding:1rem;
   z-index:3;
+}
+#search-res-block > div:nth-child(8){
+  margin-bottom:1.3rem;
 }
 .inp-holder{
   display:flex;
@@ -255,11 +269,8 @@ nav{
   padding:.8rem 1rem;
   margin-bottom:1rem;
   border-radius:15px;
-  background:var(--modal-bg);
+  background:var(--sidebar-bg);/*(--srch-ans);*/
   align-items:center;
-}
-.search-res:last-child{
-  margin-bottom:2rem;
 }
 .search-res img{
   width:25px;
@@ -269,10 +280,16 @@ nav{
 .search-res div:nth-child(2){
   display:flex;
   align-items:center;
+  flex-wrap:wrap;
+  gap:.4rem;
 }
 .search-res-id{
-  flex:1;
   margin-right:10%;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;
+  flex:1;
 }
 .search-res-name{
   margin-right:2%;
@@ -280,11 +297,16 @@ nav{
   font-weight:500;
   color:var(--default-color);
   font-family:var(--heading);
+  white-space:normal;
+  overflow-wrap:break-word;
+  word-break:break-word;
 }
 .search-res-symbol{
   font-size:1.1rem;
   color:var(--token-symbol);
   font-family:var(--sectext);
+  white-space:normal;
+  overflow-wrap:break-word;
 }
 .search-res-asset-type{
   justify-self:end;
@@ -742,9 +764,10 @@ nav{
   }
   #search-res-block{
   top:2%;
-  left:24%;
-  width:auto;
+  left:20%;
+  width:75%;
   padding:1rem;
+  z-index:3;
 }
   .nav-notif{
     margin-right:0;

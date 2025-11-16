@@ -1,3 +1,5 @@
+const container = document.querySelector(".container");
+const bodyOverlay = document.querySelector("#overlay");
 const nav = document.querySelector("nav");
 const searchBtn = document.querySelector(".search-block");
 const searchbar = nav.querySelector("input");
@@ -55,14 +57,24 @@ for(let i=0;i<theme.length;i++){
 const navEntry = document.querySelector("#nav-entry");
 const searchResContainer = document.querySelector("#search-res-block");
 const proceedAdvSearch = document.querySelector(".proceed-adv");
-const cancelSearch = document.querySelector(".search-cancel");
+const cancelSearch = searchResContainer.querySelector(".search-cancel");
 navEntry.addEventListener("click",()=>{
+  document.body.style.overflow = "hidden";
+  bodyOverlay.style.display = "block";
   navEntry.style.display = "none";
   searchResContainer.style.display = "flex";
+  const existingRes = searchResContainer.querySelectorAll(".search-results, .res-num-display");
+  existingRes.forEach(el => el.remove());
+  mainInp.value = "";
 })
 const mainInp = searchResContainer.querySelector("input");
+searchResContainer.addEventListener("click", (e)=>{
+  e.stopPropagation();
+})
 async function advSearch(){
   if(!mainInp.value.trim()){return;}
+  const existingRes = searchResContainer.querySelectorAll(".search-results, .res-num-display");
+  existingRes.forEach(el => el.remove());
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -81,8 +93,6 @@ async function advSearch(){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
       const data = await res.json();
-      console.log(data);
-      let resultsHTML = `<div class="res-num-display">Showing ${data.Data.LIST.length} of 50+ relevant results.</div>`;
       data.Data.LIST.forEach((item, index, arr)=>{
         const searchResults = document.createElement("div");
         searchResults.classList.add("search-results");
@@ -127,14 +137,21 @@ async function advSearch(){
 proceedAdvSearch.addEventListener("click", advSearch);
 mainInp.addEventListener("keypress", (e)=>{
   if(e.key === "Enter"){
+    e.preventDefault();
     advSearch();
   }
 });
-cancelSearch.addEventListener("click", ()=>{
+function closeSearchModal(){
+  document.body.style.overflow = "auto";
   mainInp.value = "";
+  const alrExistingRes = searchResContainer.querySelectorAll(".search-results, .res-num-display");
+  alrExistingRes.forEach(info => info.remove());
+  bodyOverlay.style.display = "none";
   navEntry.style.display = "flex";
   searchResContainer.style.display = "none";
-})
+}
+cancelSearch.addEventListener("click", closeSearchModal);
+bodyOverlay.addEventListener("click", closeSearchModal);
 
 
 //LAST UPDATED
@@ -254,7 +271,7 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 	  console.error(error); 
   }
 }
-getGlobalMetric();
+//getGlobalMetric();
 
 
 //TRENDING COINS
@@ -314,7 +331,7 @@ async function getTrending(){
     console.log(err)
   }
 }
-getTrending();
+//getTrending();
 
 
 //TOP COINS
