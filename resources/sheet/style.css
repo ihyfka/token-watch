@@ -73,7 +73,7 @@ body{
   font-family:var(--heading);
   font-weight:600;
   font-size:2rem;
-  color:var(--err-msg);
+  color:var(--modal-sec);
 }
 #nav-tabs{
   position:fixed;
@@ -273,7 +273,9 @@ nav{
   font-size:1.2rem;
   font-family:var(--sectext);
 }
-
+.mc-change svg{
+  margin-left:.3rem;
+}
 .btc-dom, .eth-dom{
   display:inline-flex;
   flex-wrap:wrap;
@@ -599,7 +601,7 @@ nav{
     margin-right:.5rem;
     padding:.7rem;
   }
-  .nav-light{
+  .nav-dark{
     display:none;
   }
   .nav-tab-span{

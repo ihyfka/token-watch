@@ -51,21 +51,19 @@ for(let i=0;i<theme.length;i++){
 
 
 //SEARCH
-
-// searchBtn.addEventListener("click",()=>{
-//   let innit = searchbar.value;
-//   fetch(`${cd_url}search_string=${innit}&limit=10`,{
-//     method:"GET",
-//     headers:{
-//       "Authorization": `Bearer ${cd_apiKey}`,
-//       "Content-Type": "application.json"
-//     }
-//   })
-//   .then((res)=>res.json())
-//   .then((data)=>console.log(data))
-//   .catch((err)=>console.log(err))
-// })
-
+searchBtn.addEventListener("click",()=>{
+  let innit = searchbar.value;
+  fetch(`${cd_url}search_string=${innit}&limit=10`,{
+    method:"GET",
+    headers:{
+      "Authorization": `Bearer ${cd_apiKey}`,
+      "Content-Type": "application.json"
+    }
+  })
+  .then((res)=>res.json())
+  .then((data)=>console.log(data))
+  .catch((err)=>console.log(err))
+})
 
 
 // const navEntry = document.querySelector("#nav-entry");
@@ -212,15 +210,7 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 	  console.error(error); 
   }
 }
-searchBtn.addEventListener("click", getGlobalMetric);
-
-
-
-
-
-
-
-
+//getGlobalMetric();
 
 
 
@@ -281,7 +271,7 @@ async function getTrending(){
     console.log(err)
   }
 }
-getTrending();
+//getTrending();
 
 
 //RECENTLY ADDED COINS
@@ -394,7 +384,7 @@ async function cryptoNews(){
     //console.log(err);
   }
 }
-cryptoNews();
+//cryptoNews();
 
 
 //REFRESH BUTTON
