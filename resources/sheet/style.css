@@ -13,13 +13,14 @@ html{
   --bg:#00000FFE;
   --default-color:#FFF;
   --search-bg:#464746;
+  --search-res:#090A16;
   --last-updated:#EEFFEECC;
-  --modal-bg:#373839AA;
+  --modal-bg:#37383988;
   --sidebar-bg:#37383957;
   --activetheme:#FAE529DD;
   --modal-sec:#7EF598D5;
   --modal-sec-w:#EEFFEE;
-  --token-symbol:#888877CC;
+  --token-symbol:#AAAA99DD;
   --theme-bg:#1A1A1A;
   --bullish:#2DC24E;
   --bearish:#F92C2C;
@@ -33,8 +34,9 @@ html{
   --bg:#FFFE;
   --default-color:#1A1A1A;
   --search-bg:#F0F0F0;
+  --search-res:#EBEBEC;
   --last-updated:#335533;
-  --modal-bg:#FDFDFD;
+  --modal-bg:#DBDBDB;/*FDFDFD*/
   --sidebar-bg:#F0F0F0;
   --activetheme:#FADB29CD;
   --modal-sec:#335533;
@@ -54,12 +56,14 @@ body{
 }
 .container{
   display:grid;
-  grid-template-columns: 15% 85%;
+  /* grid-template-columns:15% 85%; */
+  grid-template-columns:100%;
   min-height:100vh;
   max-width:100%;
 }
 #sidebar{
-  display:flex;
+  /* display:flex; */
+  display:none;
   min-height:100vh;
   padding:2rem 1.9rem 4rem 1.9rem;
   background:var(--sidebar-bg);
@@ -129,10 +133,9 @@ body{
   cursor:pointer;
 }
 .nav-theme{
-  display:none;
-}
-.dark-theme{
-  display:none;
+  display:block;
+  margin-right:1%;
+  padding:1rem;
 }
 .light-theme, .dark-theme{
   padding:.7rem;
@@ -142,7 +145,7 @@ body{
   background:var(--activetheme);
 }
 .main{
-  padding:1rem 1.3rem 2rem;
+  padding:1rem 1.6rem 2rem;
   color:var(--default-color);
 }
 nav{
@@ -157,8 +160,10 @@ nav{
   display:flex;
   align-items:center;
   margin-right:1rem;
-  font-size:3rem;
+  font-size:2.5rem;
   font-family:var(--heading);
+  font-weight:600;
+  color:var(--modal-sec);
 }
 .tab-switch{
   display:none;
@@ -183,6 +188,7 @@ nav{
   cursor:pointer;
 }
 #nav-entry input{
+  width:100%;
   outline:none;
   border:none;
   border-top-right-radius:inherit;
@@ -192,9 +198,106 @@ nav{
   color:var(--tab-color);
   background:none;
 }
-.mb-search{
-  position:absolute;
-  background:red;
+
+#search-res-block{
+  position:fixed;
+  top:1.5%;
+  left:39%;
+  /* display:flex; */
+  display:none;
+  flex-direction:column;
+  border-radius:25px;
+  background:var(--search-res);
+  width:60%;
+  color:white;
+  padding:1rem;
+  z-index:3;
+}
+.inp-holder{
+  display:flex;
+  align-items:center;
+  margin-bottom:2rem;
+  padding:.5rem 0;
+  border-radius:15px;
+  background:none;
+}
+.inp-holder svg:nth-child(1){
+  margin:1%;
+  margin-right:1.5%;
+  cursor:pointer;
+}
+.search-cancel{
+  margin:1%;
+  cursor:pointer;
+}
+.inp-holder input{
+  width:60%;
+  padding:.5rem 0;
+  outline:none;
+  border:none;
+  border-bottom:2px solid var(--modal-bg);
+  border-left:0px;
+  font-size:1.4rem;
+  flex:1;
+  color:var(--tab-color);
+  background:none;
+}
+.inp-holder input::-webkit-input-placeholder{
+  color:var(--tab-color);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.search-res{
+  display:grid;
+  grid-template-columns:minmax(3rem, .2rem) minmax(auto, 1fr);
+  gap:1%;
+  padding:.8rem 1rem;
+  margin-bottom:1rem;
+  border-radius:15px;
+  background:var(--modal-bg);
+  align-items:center;
+}
+.search-res:last-child{
+  margin-bottom:2rem;
+}
+.search-res img{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+}
+.search-res div:nth-child(2){
+  display:flex;
+  align-items:center;
+}
+.search-res-id{
+  flex:1;
+  margin-right:10%;
+}
+.search-res-name{
+  margin-right:2%;
+  font-size:1.5rem;
+  font-weight:500;
+  color:var(--default-color);
+  font-family:var(--heading);
+}
+.search-res-symbol{
+  font-size:1.1rem;
+  color:var(--token-symbol);
+  font-family:var(--sectext);
+}
+.search-res-asset-type{
+  justify-self:end;
+  color:var(--tab-color);
+  font-size:1.2rem;
+  font-family:var(--maintext);
+}
+.res-num-display{
+  margin-bottom:.7rem;
+  text-align:center;
+  font-size:1.1rem;
+  font-family:var(--sectext);
+  color:var(--default-color);
 }
 .nav-notif{
   margin-right:1%;
@@ -232,7 +335,7 @@ nav{
 
 #market-overview{
   display:grid;
-  grid-template-columns:minmax(10rem, .15fr) minmax(15rem, .3fr) minmax(12rem, .2fr);
+  grid-template-columns:minmax(10rem, .15fr) minmax(15rem, .3fr) minmax(13rem, .2fr);
   gap:2%;
   margin-bottom:5rem;
   align-items:center;
@@ -637,6 +740,12 @@ nav{
   #nav-entry input{
     display:none;
   }
+  #search-res-block{
+  top:2%;
+  left:24%;
+  width:auto;
+  padding:1rem;
+}
   .nav-notif{
     margin-right:0;
   }

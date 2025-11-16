@@ -2,12 +2,13 @@ const nav = document.querySelector("nav");
 const searchBtn = document.querySelector(".search-block");
 const searchbar = nav.querySelector("input");
 const newsDataAPI = "https://newsdata.io/api/1/crypto?q=coin&language=en&apikey=pub_d06190c1d4ed41f49ca89fbe2652b219";
+const cd_url ="https://data-api.coindesk.com/asset/v1/search?";
 const topCoinsBoxesBox = document.querySelector(".topcoins-boxes");
 const refreshBtn = document.querySelector(".new-content");
 const fetchErr = document.createElement("div");
 
 
-const cd_url ="https://data-api.coindesk.com/asset/v1/search?";  //search
+
 const cd_apiKey = "52c3585330d97bea4d7f3d257fe53885deeeac6d8b9d92ee01d1998eca9923cc";
 const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quotes?apikey=uF6ISygDHXhMVc5UqIFfP0e2lFz7o5P5";
 
@@ -41,7 +42,7 @@ function launchLightMode(){
   navLight.style.display = "none";
   navDark.style.display = "inline-block";
 }
-getDarkmode === "true" ? launchDarkMode(): 0;
+getDarkmode === "true" ? launchDarkMode(): launchLightMode();
 for(let i=0;i<theme.length;i++){
   theme[i].addEventListener("click", ()=>{
     getDarkmode = localStorage.getItem("darkMode");
@@ -51,46 +52,89 @@ for(let i=0;i<theme.length;i++){
 
 
 //SEARCH
-searchBtn.addEventListener("click",()=>{
-  let innit = searchbar.value;
-  fetch(`${cd_url}search_string=${innit}&limit=10`,{
-    method:"GET",
-    headers:{
-      "Authorization": `Bearer ${cd_apiKey}`,
-      "Content-Type": "application.json"
-    }
-  })
-  .then((res)=>res.json())
-  .then((data)=>console.log(data))
-  .catch((err)=>console.log(err))
+const navEntry = document.querySelector("#nav-entry");
+const searchResContainer = document.querySelector("#search-res-block");
+const proceedAdvSearch = document.querySelector(".proceed-adv");
+const cancelSearch = document.querySelector(".search-cancel");
+navEntry.addEventListener("click",()=>{
+  navEntry.style.display = "none";
+  searchResContainer.style.display = "flex";
 })
-
-
-// const navEntry = document.querySelector("#nav-entry");
-// console.log(navEntry.querySelector("input"))
-// navEntry.addEventListener("click", (e)=>{
-//   if(e.target.contains(navEntry.querySelector("input"))){
-//     //(navEntry.querySelector("input")).style.display = "inline-block";
-//     //searchBtn.style.display = "100%";
-//     console.log("input hit")
-//   }else{
-//     console.log("target not found")
-//   }
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const mainInp = searchResContainer.querySelector("input");
+async function advSearch(){
+  if(!mainInp.value.trim()){return;}
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const timeoutId = setTimeout(()=>{
+    controller.abort()
+  }, 5000)
+  let innit = mainInp.value;
+  try{
+    const res = await fetch(`${cd_url}search_string=${innit}&limit=7`,{
+      method:"GET",
+      headers:{
+        "Authorization": `Bearer ${cd_apiKey}`,
+        "Content-Type": "application.json"
+      }
+    }, {signal});
+    if(!res.ok){
+      throw new Error(`HTTP error! status code: ${res.status}`);
+    }else{
+      const data = await res.json();
+      console.log(data);
+      let resultsHTML = `<div class="res-num-display">Showing ${data.Data.LIST.length} of 50+ relevant results.</div>`;
+      data.Data.LIST.forEach((item, index, arr)=>{
+        const searchResults = document.createElement("div");
+        searchResults.classList.add("search-results");
+        const searchRes = document.createElement("div");
+        searchRes.classList.add("search-res");
+        const searchResIcon = document.createElement("div");
+        searchResIcon.classList.add("search-res-icon");
+        const searchImg = document.createElement("img");
+        searchImg.src = data.Data.LIST[index].LOGO_URL;
+        searchImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';"
+        searchResIcon.append(searchImg);
+        const div = document.createElement("div");
+        const searchResId = document.createElement("div");
+        searchResId.classList.add("search-res-id");
+        const sResName = document.createElement("span");
+        sResName.classList.add("search-res-name");
+        sResName.textContent = data.Data.LIST[index].NAME;
+        const sResSymbol = document.createElement("span");
+        sResSymbol.classList.add("search-res-symbol");
+        sResSymbol.textContent = data.Data.LIST[index].SYMBOL;
+        searchResId.append(sResName, sResSymbol);
+        const sResAssetType = document.createElement("span");
+        sResAssetType.classList.add("search-res-asset-type");
+        sResAssetType.textContent = data.Data.LIST[index].ASSET_TYPE;
+        div.append(searchResId, sResAssetType);
+        searchRes.append(searchResIcon, div);
+        searchResults.append(searchRes);
+        searchResContainer.append(searchResults);
+      });
+      
+      const resNumDisp = document.createElement("div");
+      resNumDisp.classList.add("res-num-display");
+      resNumDisp.textContent = `Showing ${data.Data.LIST.length} of 50+ relevant results.`;
+      searchResContainer.append(resNumDisp);
+    }
+  }catch(err){
+    console.log(err);
+  }finally{
+    clearTimeout(timeoutId);
+  }
+}
+proceedAdvSearch.addEventListener("click", advSearch);
+mainInp.addEventListener("keypress", (e)=>{
+  if(e.key === "Enter"){
+    advSearch();
+  }
+});
+cancelSearch.addEventListener("click", ()=>{
+  mainInp.value = "";
+  navEntry.style.display = "flex";
+  searchResContainer.style.display = "none";
+})
 
 
 //LAST UPDATED
@@ -210,8 +254,7 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 	  console.error(error); 
   }
 }
-//getGlobalMetric();
-
+getGlobalMetric();
 
 
 //TRENDING COINS
@@ -232,7 +275,6 @@ async function getTrending(){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
       const data = await res.json();
-      console.log(data);
       data.data.coins.forEach((item, index)=>{
         const topTrending = document.createElement("div");
         numSpan = document.createElement("span");
@@ -243,7 +285,8 @@ async function getTrending(){
         topTrending.classList.add("top-trending");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
-        trendingTokenImg.src = data.data.coins[index].iconUrl || "./resources/images/general-purpose-cover.png";
+        trendingTokenImg.src = data.data.coins[index].iconUrl;
+        trendingTokenImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
         tokName.classList.add("token-name");
         tokName.textContent = data.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
@@ -271,10 +314,7 @@ async function getTrending(){
     console.log(err)
   }
 }
-//getTrending();
-
-
-//RECENTLY ADDED COINS
+getTrending();
 
 
 //TOP COINS
@@ -300,7 +340,8 @@ async function getTopCoins(){
       topCoinBoxValue.classList.add("topcoins-value");
       const topCoinValueChange = document.createElement("p");
       const valueTimePeriod = document.createElement("span");
-      topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png` || "./resources/images/general-purpose-cover.png";
+      topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png`;
+      topCoinBoxImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
       topCoinBoxName.textContent = data.data[index].name;
       topCoinBoxValue.textContent = "$" + data.data[index].price_usd;
       topCoinValueChange.textContent = data.data[index].percent_change_1h + "%";
@@ -321,7 +362,7 @@ async function getTopCoins(){
     fetchErr.classList.add("fetch-err");
     fetchErr.textContent = "Error! Unable to fetch coin metrics.";
     topCoinsBoxesBox.append(fetchErr);
-    //console.log(err);
+    console.log(err);
   }
 }
 getTopCoins();
@@ -352,7 +393,8 @@ async function cryptoNews(){
       article.classList.add("article");
       auth.classList.add("auth");
       newsImg.classList.add("auth-img");
-      newsImg.src = data.results[index].image_url || "./resources/images/resolve-images-not-showing-problem-1.jpg";
+      newsImg.src = data.results[index].image_url;
+      newsImg.onerror = "this.onerror=null; this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';";
       artTitle.classList.add("article-title");
       artTitle.textContent = data.results[index].title;
       artDesc.classList.add("article-desc");
@@ -384,7 +426,7 @@ async function cryptoNews(){
     //console.log(err);
   }
 }
-//cryptoNews();
+cryptoNews();
 
 
 //REFRESH BUTTON
@@ -409,6 +451,19 @@ refreshBtn.addEventListener("click", ()=>{
 
 
 
+// searchBtn.addEventListener("click",()=>{
+//   let innit = searchbar.value;
+//   fetch(`${cd_url}search_string=${innit}&limit=10`,{
+//     method:"GET",
+//     headers:{
+//       "Authorization": `Bearer ${cd_apiKey}`,
+//       "Content-Type": "application.json"
+//     }
+//   })
+//   .then((res)=>res.json())
+//   .then((data)=>console.log(data))
+//   .catch((err)=>console.log(err))
+// })
 
 
 // async function raCoins(){
