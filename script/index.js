@@ -10,7 +10,6 @@ const refreshBtn = document.querySelector(".new-content");
 const fetchErr = document.createElement("div");
 
 
-
 const cd_apiKey = "52c3585330d97bea4d7f3d257fe53885deeeac6d8b9d92ee01d1998eca9923cc";
 const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quotes?apikey=uF6ISygDHXhMVc5UqIFfP0e2lFz7o5P5";
 
@@ -54,12 +53,19 @@ for(let i=0;i<theme.length;i++){
 
 
 //SEARCH
+let isCIP = false;
 const navEntry = document.querySelector("#nav-entry");
 const searchResContainer = document.querySelector("#search-res-block");
 const proceedAdvSearch = document.querySelector(".proceed-adv");
 const cancelSearch = searchResContainer.querySelector(".search-cancel");
 navEntry.addEventListener("click",()=>{
   document.body.style.overflow = "hidden";
+  if(window.matchMedia("(max-width:425px)").matches){
+    if(document.body.classList.contains("light")){
+      nav.style.background = "#666666";
+    }
+  }
+  if(!document.body.classList.contains("light")){nav.style.background = "#00000C88";}
   bodyOverlay.style.display = "block";
   navEntry.style.display = "none";
   searchResContainer.style.display = "flex";
@@ -72,7 +78,9 @@ searchResContainer.addEventListener("click", (e)=>{
   e.stopPropagation();
 })
 async function advSearch(){
-  if(!mainInp.value.trim()){return;}
+  if(isCIP){return};
+  isCIP = true;
+  if(!mainInp.value.trim()){return};
   const existingRes = searchResContainer.querySelectorAll(".search-results, .res-num-display");
   existingRes.forEach(el => el.remove());
   const controller = new AbortController();
@@ -122,7 +130,6 @@ async function advSearch(){
         searchResults.append(searchRes);
         searchResContainer.append(searchResults);
       });
-      
       const resNumDisp = document.createElement("div");
       resNumDisp.classList.add("res-num-display");
       resNumDisp.textContent = `Showing ${data.Data.LIST.length} of 50+ relevant results.`;
@@ -130,8 +137,10 @@ async function advSearch(){
     }
   }catch(err){
     console.log(err);
+    isCIP = false;
   }finally{
     clearTimeout(timeoutId);
+    if(isCIP){isCIP = false}
   }
 }
 proceedAdvSearch.addEventListener("click", advSearch);
@@ -143,6 +152,7 @@ mainInp.addEventListener("keypress", (e)=>{
 });
 function closeSearchModal(){
   document.body.style.overflow = "auto";
+  nav.style.background = "var(--bg)";
   mainInp.value = "";
   const alrExistingRes = searchResContainer.querySelectorAll(".search-results, .res-num-display");
   alrExistingRes.forEach(info => info.remove());
@@ -271,7 +281,7 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 	  console.error(error); 
   }
 }
-//getGlobalMetric();
+getGlobalMetric();
 
 
 //TRENDING COINS
@@ -331,7 +341,7 @@ async function getTrending(){
     console.log(err)
   }
 }
-//getTrending();
+getTrending();
 
 
 //TOP COINS

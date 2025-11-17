@@ -16,7 +16,7 @@ html{
   --search-res:#0a0a14;
   --srch-ans:#37383957;
   --last-updated:#EEFFEECC;
-  --modal-bg:#37383988;
+  --modal-bg:#37384088;
   --sidebar-bg:#37383957;
   --activetheme:#FAE529DD;
   --modal-sec:#7EF598D5;
@@ -38,7 +38,7 @@ html{
   --search-res:#EBEBEC;
   --srch-ans:#DBDBDB;
   --last-updated:#335533;
-  --modal-bg:#DBDBDB;/*FDFDFD*/
+  --modal-bg:#DFDFDF;
   --sidebar-bg:#F0F0F0;
   --activetheme:#FADB29CD;
   --modal-sec:#335533;
@@ -70,8 +70,8 @@ body{
   position:absolute;
   top:0; left:0;
   width:100%;
-  height:100vh;
-  background:#0005;
+  min-height:100vh;
+  background:#0009;
 }
 #sidebar{
   /* display:flex; */
