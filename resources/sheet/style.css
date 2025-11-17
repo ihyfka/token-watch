@@ -572,13 +572,6 @@ nav{
   border-radius:15px;
 }
 @keyframes shimmer{
-  /* 0%{
-    background:var(--modal-bg);
-  }50%{
-    background:var(--sidebar-bg);
-  }100%{
-    background:var(--modal-bg);
-  } */
    from{
     background-position:-120% 0;
   }to{

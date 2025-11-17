@@ -316,7 +316,6 @@ async function getTrending(){
         if (lazyTrendingBox) {
           lazyTrendingBox.remove();
       }
-
       const data = await res.json();
       data.data.coins.forEach((item, index)=>{
         const topTrending = document.createElement("div");
@@ -347,8 +346,7 @@ async function getTrending(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    //beforeDatacomes();
-    //isLoading = true;
+    
   
     console.log(err)
   }
@@ -361,12 +359,10 @@ const topCoinsSection = document.querySelector("#topcoins");
 async function getTopCoins(){
   const lazyCoinBoxesBox = document.createElement('div');
     lazyCoinBoxesBox.classList.add("lazy-tag");
-
     const fragment = document.createDocumentFragment();
     const lazyCoinContainer = document.createElement("div");
       lazyCoinContainer.classList.add("lazycoins-div");
     for(let i=0;i<10;i++){
-      
       const lazyCoinBox = document.createElement("div");
       lazyCoinBox.classList.add("lazycoins");
       const lazyCoinNameSkeleton = document.createElement("p");
@@ -376,14 +372,11 @@ async function getTopCoins(){
       const lazyCoinOtherSkeleton = document.createElement("p");
       lazyCoinOtherSkeleton.classList.add("coin-framework");
       lazyCoinBox.append(lazyCoinNameSkeleton, lazyCoinPriceSkeleton, lazyCoinOtherSkeleton);
-      
       fragment.append(lazyCoinBox);   
     }
     lazyCoinBoxesBox.append(fragment);
     lazyCoinContainer.append(lazyCoinBoxesBox);
     topCoinsSection.appendChild(lazyCoinContainer);
-
-
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -395,10 +388,9 @@ async function getTopCoins(){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
       const lazyCoinBoxes = document.querySelector(".lazy-tag");
-        if (lazyCoinBoxesBox) {
-          lazyCoinBoxesBox.remove();
+      if (lazyCoinBoxesBox) {
+        lazyCoinBoxesBox.remove();
       }
-
       const data = await res.json();
       data.data.forEach((item, index)=>{
         const topCoinsBox = document.createElement("div");
@@ -428,16 +420,16 @@ async function getTopCoins(){
       }) 
     }
   }catch(err){
-    
-
-
+    clearTimeout(timeoutId);
     console.log(err);
   }finally{
-    clearTimeout(timeoutId);
-    // const fetchErr = document.createElement("div");
-    // fetchErr.classList.add("fetch-err");
-    // fetchErr.textContent = "Error! Unable to fetch coin metrics.";
-    // topCoinsBoxesBox.append(fetchErr);
+    if (lazyCoinBoxesBox) {
+      lazyCoinBoxesBox.remove();
+    }
+    const fetchErr = document.createElement("div");
+    fetchErr.classList.add("fetch-err");
+    fetchErr.textContent = "Error! Unable to fetch coin metrics.";
+    topCoinsBoxesBox.append(fetchErr);
   }
 }
 getTopCoins();
