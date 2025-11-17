@@ -70,7 +70,7 @@ body{
   position:absolute;
   top:0; left:0;
   width:100%;
-  min-height:100vh;
+  height:480vh;
   background:#0009;
 }
 #sidebar{
@@ -188,9 +188,6 @@ nav{
   padding:.5rem;
   border-radius:40px;
   background:var(--modal-bg);
-}
-.light #nav-entry{
-  border:1px solid var(--token-symbol);
 }
 .search-block{
   margin-right:3%;
@@ -449,7 +446,7 @@ nav{
   background:var(--sidebar-bg);
   box-shadow:0 0 1px 2px var(--border-color);
 }
-.trending-block .lazy:nth-child(2){
+.trending-block .lazy:nth-child(1){
   margin-top:1.3rem;
 }
 .block-head{
@@ -481,6 +478,23 @@ nav{
   font-family:var(--sectext);
   background:var(--modal-bg);
 }
+.lazy{
+  margin-bottom:.7rem;
+  width:100%;
+  height:4.6rem;
+  border:none;
+  border-radius:25px;
+  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 18%, var(--modal-bg) 33%);
+  background-size:200% 100%;
+  animation: lazyload 2.5s infinite ease;
+}
+@keyframes lazyload{
+  from{
+    background-position:-120% 0;
+  }to{
+    background-position:120% 0;
+  }
+}
 .top-trending:nth-child(2), .top-ra:nth-child(2){
   margin-top:1.3rem;
 }
@@ -505,6 +519,71 @@ nav{
 #topcoins{
   margin-bottom:3rem;
   padding-right:.5rem;
+}
+.lazy-tag{
+  display:flex;
+  flex-wrap:nowrap;
+  margin-top:2rem;
+  width:100%;
+  align-items:center;
+  overflow-x:auto;
+  scroll-snap-type:x;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+}
+.lazycoins{
+  display:flex;
+  flex-direction:column;
+  margin: 0 2rem 2rem 0;
+  padding:2rem;
+  min-width: 20rem;
+  min-height: 16.5rem;
+  aspect-ratio:5 / 4;
+  justify-content: center;
+  border-radius:30px;
+  scroll-snap-align:center;
+  border:none;
+  border-radius:30px;
+  background:var(--sidebar-bg);
+}
+.coin-framework{
+  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 18%, var(--modal-bg) 33%);
+  background-size:200% 100%;
+  animation: shimmer 2.5s infinite ease;
+}
+.lazycoins > p:nth-child(1){
+  margin-bottom:3%;
+  width:40%;
+  height:2.7rem;
+  border:none;
+  border-radius:15px;
+}
+.lazycoins > p:nth-child(2){
+  margin-bottom:3%;
+  width:87%;
+  height:3rem;
+  border:none;
+  border-radius:15px;
+}
+.lazycoins > p:nth-child(3){
+  width:60%;
+  height:2.7rem;
+  border:none;
+  border-radius:15px;
+}
+@keyframes shimmer{
+  /* 0%{
+    background:var(--modal-bg);
+  }50%{
+    background:var(--sidebar-bg);
+  }100%{
+    background:var(--modal-bg);
+  } */
+   from{
+    background-position:-120% 0;
+  }to{
+    background-position:120% 0;
+  }
 }
 .topcoins-modal-head{
   font-family:var(--maintext);
@@ -538,23 +617,6 @@ nav{
   border-radius:30px;
   scroll-snap-align:center;
   background:var(--sidebar-bg);
-}
-.lazy{
-  margin-bottom:.7rem;
-  width:100%;
-  height:4.6rem;
-  border:none;
-  border-radius:inherit;
-  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 18%, var(--modal-bg) 33%);
-  background-size:200% 100%;
-  animation: shimmer 2.5s infinite ease;
-}
-@keyframes shimmer{
-  from{
-    background-position:-120% 0;
-  }to{
-    background-position:120% 0;
-  }
 }
 .topcoins-box img{
   height:40px;
@@ -698,6 +760,9 @@ nav{
   .container{
     grid-template-columns:100%;
   }
+  #overlay{
+    height:650vh;
+  }
   #sidebar{
     display:none;
     padding:0;
@@ -709,6 +774,7 @@ nav{
   nav{
     position:sticky;
     top:0;
+    margin-bottom:3rem;
     padding:.3rem 0 .7rem;
     background:var(--bg);
   }

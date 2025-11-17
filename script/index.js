@@ -8,12 +8,13 @@ const cd_url ="https://data-api.coindesk.com/asset/v1/search?";
 const topCoinsBoxesBox = document.querySelector(".topcoins-boxes");
 const refreshBtn = document.querySelector(".new-content");
 const fetchErr = document.createElement("div");
-
+const trendingDiv = document.querySelector(".trending-block");
 
 const cd_apiKey = "52c3585330d97bea4d7f3d257fe53885deeeac6d8b9d92ee01d1998eca9923cc";
 const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quotes?apikey=uF6ISygDHXhMVc5UqIFfP0e2lFz7o5P5";
 
 "https://financialmodelingprep.com/stable/quote?symbol=AAPL&apikey="
+
 
 
 
@@ -65,7 +66,9 @@ navEntry.addEventListener("click",()=>{
       nav.style.background = "#666666";
     }
   }
-  if(!document.body.classList.contains("light")){nav.style.background = "#00000C88";}
+  if(!document.body.classList.contains("light")){
+    nav.style.background = "#00000593";
+  }
   bodyOverlay.style.display = "block";
   navEntry.style.display = "none";
   searchResContainer.style.display = "flex";
@@ -281,12 +284,20 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 	  console.error(error); 
   }
 }
-getGlobalMetric();
+//getGlobalMetric();
 
 
 //TRENDING COINS
-const trendingDiv = document.querySelector(".trending-block");
 async function getTrending(){
+  const lazyTrendingBox = document.createElement('div');
+  lazyTrendingBox.classList.add("lazy-tag");
+  lazyTrendingBox.innerHTML = `
+    <div class="lazy"></div>
+    <div class="lazy"></div>
+    <div class="lazy"></div>
+  `;
+  trendingDiv.appendChild(lazyTrendingBox);
+
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -301,6 +312,11 @@ async function getTrending(){
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
+      const lazyTrendingBox = document.querySelector(".lazy-tag");
+        if (lazyTrendingBox) {
+          lazyTrendingBox.remove();
+      }
+
       const data = await res.json();
       data.data.coins.forEach((item, index)=>{
         const topTrending = document.createElement("div");
@@ -331,21 +347,43 @@ async function getTrending(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    const fragment = document.createDocumentFragment();
-    for(let i=0;i<3;i++){
-      const lazyTrendingBox = document.createElement("div");
-      lazyTrendingBox.classList.add("lazy");
-      fragment.append(lazyTrendingBox);   
-    }
-    trendingDiv.append(fragment);
+    //beforeDatacomes();
+    //isLoading = true;
+  
     console.log(err)
   }
 }
-getTrending();
+//getTrending();
 
 
 //TOP COINS
+const topCoinsSection = document.querySelector("#topcoins");
 async function getTopCoins(){
+  const lazyCoinBoxesBox = document.createElement('div');
+    lazyCoinBoxesBox.classList.add("lazy-tag");
+
+    const fragment = document.createDocumentFragment();
+    const lazyCoinContainer = document.createElement("div");
+      lazyCoinContainer.classList.add("lazycoins-div");
+    for(let i=0;i<10;i++){
+      
+      const lazyCoinBox = document.createElement("div");
+      lazyCoinBox.classList.add("lazycoins");
+      const lazyCoinNameSkeleton = document.createElement("p");
+      lazyCoinNameSkeleton.classList.add("coin-framework");
+      const lazyCoinPriceSkeleton = document.createElement("p");
+      lazyCoinPriceSkeleton.classList.add("coin-framework");
+      const lazyCoinOtherSkeleton = document.createElement("p");
+      lazyCoinOtherSkeleton.classList.add("coin-framework");
+      lazyCoinBox.append(lazyCoinNameSkeleton, lazyCoinPriceSkeleton, lazyCoinOtherSkeleton);
+      
+      fragment.append(lazyCoinBox);   
+    }
+    lazyCoinBoxesBox.append(fragment);
+    lazyCoinContainer.append(lazyCoinBoxesBox);
+    topCoinsSection.appendChild(lazyCoinContainer);
+
+
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -355,41 +393,51 @@ async function getTopCoins(){
     const res = await fetch(`https://api.coinlore.com/api/tickers/?start=0&limit=10`, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
-    }
-    const data = await res.json();
-    data.data.forEach((item, index)=>{
-      const topCoinsBox = document.createElement("div");
-      topCoinsBox.classList.add("topcoins-box");
-      topCoinsBox.style.padding = "2rem";
-      const topCoinBoxImg = document.createElement("img");
-      const topCoinBoxName = document.createElement("p");
-      const topCoinBoxValue = document.createElement("span");
-      topCoinBoxValue.classList.add("topcoins-value");
-      const topCoinValueChange = document.createElement("p");
-      const valueTimePeriod = document.createElement("span");
-      topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png`;
-      topCoinBoxImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
-      topCoinBoxName.textContent = data.data[index].name;
-      topCoinBoxValue.textContent = "$" + data.data[index].price_usd;
-      topCoinValueChange.textContent = data.data[index].percent_change_1h + "%";
-      if(Math.sign(data.data[index].percent_change_1h) === 1){
-        topCoinValueChange.style.color = "var(--bullish)";
-      }else{
-        topCoinValueChange.style.color = "var(--bearish)";
+    }else{
+      const lazyCoinBoxes = document.querySelector(".lazy-tag");
+        if (lazyCoinBoxesBox) {
+          lazyCoinBoxesBox.remove();
       }
-      valueTimePeriod.style.color = "var(--tab-hover)";
-      valueTimePeriod.textContent = "1H";
-      topCoinValueChange.append(valueTimePeriod);
-      topCoinsBox.append(topCoinBoxImg, topCoinBoxName, topCoinBoxValue, topCoinValueChange);
-      topCoinsBoxesBox.append(topCoinsBox);
-    }) 
+
+      const data = await res.json();
+      data.data.forEach((item, index)=>{
+        const topCoinsBox = document.createElement("div");
+        topCoinsBox.classList.add("topcoins-box");
+        topCoinsBox.style.padding = "2rem";
+        const topCoinBoxImg = document.createElement("img");
+        const topCoinBoxName = document.createElement("p");
+        const topCoinBoxValue = document.createElement("span");
+        topCoinBoxValue.classList.add("topcoins-value");
+        const topCoinValueChange = document.createElement("p");
+        const valueTimePeriod = document.createElement("span");
+        topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png`;
+        topCoinBoxImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
+        topCoinBoxName.textContent = data.data[index].name;
+        topCoinBoxValue.textContent = "$" + data.data[index].price_usd;
+        topCoinValueChange.textContent = data.data[index].percent_change_1h + "%";
+        if(Math.sign(data.data[index].percent_change_1h) === 1){
+          topCoinValueChange.style.color = "var(--bullish)";
+        }else{
+          topCoinValueChange.style.color = "var(--bearish)";
+        }
+        valueTimePeriod.style.color = "var(--tab-hover)";
+        valueTimePeriod.textContent = "1H";
+        topCoinValueChange.append(valueTimePeriod);
+        topCoinsBox.append(topCoinBoxImg, topCoinBoxName, topCoinBoxValue, topCoinValueChange);
+        topCoinsBoxesBox.append(topCoinsBox);
+      }) 
+    }
   }catch(err){
-    clearTimeout(timeoutId);
-    const fetchErr = document.createElement("div");
-    fetchErr.classList.add("fetch-err");
-    fetchErr.textContent = "Error! Unable to fetch coin metrics.";
-    topCoinsBoxesBox.append(fetchErr);
+    
+
+
     console.log(err);
+  }finally{
+    clearTimeout(timeoutId);
+    // const fetchErr = document.createElement("div");
+    // fetchErr.classList.add("fetch-err");
+    // fetchErr.textContent = "Error! Unable to fetch coin metrics.";
+    // topCoinsBoxesBox.append(fetchErr);
   }
 }
 getTopCoins();
@@ -453,7 +501,7 @@ async function cryptoNews(){
     //console.log(err);
   }
 }
-cryptoNews();
+//cryptoNews();
 
 
 //REFRESH BUTTON
@@ -608,3 +656,13 @@ refreshBtn.addEventListener("click", ()=>{
 // "platform": null,
 // "category": "coin"
 // },
+
+
+//SEARCH
+  // const fragment = document.createDocumentFragment();
+    // for(let i=0;i<3;i++){
+    //   const lazyTrendingBox = document.createElement("div");
+    //   lazyTrendingBox.classList.add("lazy");
+    //   fragment.append(lazyTrendingBox);   
+    // }
+    //trendingDiv.append(fragment);
