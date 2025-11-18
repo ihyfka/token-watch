@@ -3,23 +3,10 @@ const bodyOverlay = document.querySelector("#overlay");
 const nav = document.querySelector("nav");
 const searchBtn = document.querySelector(".search-block");
 const searchbar = nav.querySelector("input");
-const newsDataAPI = "https://newsdata.io/api/1/crypto?q=coin&language=en&apikey=pub_d06190c1d4ed41f49ca89fbe2652b219";
-const cd_url ="https://data-api.coindesk.com/asset/v1/search?";
 const topCoinsBoxesBox = document.querySelector(".topcoins-boxes");
 const refreshBtn = document.querySelector(".new-content");
 const fetchErr = document.createElement("div");
 const trendingDiv = document.querySelector(".trending-block");
-
-const cd_apiKey = "52c3585330d97bea4d7f3d257fe53885deeeac6d8b9d92ee01d1998eca9923cc";
-const cryptoQuotes = "https://financialmodelingprep.com/stable/batch-crypto-quotes?apikey=uF6ISygDHXhMVc5UqIFfP0e2lFz7o5P5";
-
-"https://financialmodelingprep.com/stable/quote?symbol=AAPL&apikey="
-
-
-
-
-
-
 
 //THEME TOGGLE
 const theme = document.querySelectorAll(".theme");
@@ -93,13 +80,7 @@ async function advSearch(){
   }, 5000)
   let innit = mainInp.value;
   try{
-    const res = await fetch(`${cd_url}search_string=${innit}&limit=7`,{
-      method:"GET",
-      headers:{
-        "Authorization": `Bearer ${cd_apiKey}`,
-        "Content-Type": "application.json"
-      }
-    }, {signal});
+    const res = await fetch(`/api/search?search_string=${encodeURIComponent(innit)}&limit=7`, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
@@ -139,7 +120,7 @@ async function advSearch(){
       searchResContainer.append(resNumDisp);
     }
   }catch(err){
-    console.log(err);
+    //console.log(err);
     isCIP = false;
   }finally{
     clearTimeout(timeoutId);
@@ -196,15 +177,7 @@ async function getGlobalMetric(){
     controller.abort()
   }, 5000)
   try{
-    const url = 'https://cryptocurrency-markets.p.rapidapi.com/v1/crypto/modules?module=global_matric';
-    const options = {
-	    method: 'GET',
-	    headers:{
-		    'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
-		    'x-rapidapi-host': 'cryptocurrency-markets.p.rapidapi.com'
-	    }
-    };
-	  const res = await fetch(url, options, {signal});
+    const res = await fetch(`/api/global-metrics`, {signal});
 	  const data = await res.json();
 	  const mcDaily = document.createElement("div");
     mcDaily.classList.add("daily-mc");
@@ -274,17 +247,17 @@ async function getGlobalMetric(){
     fgNum.textContent = "67";
     const fgComment = document.createElement("p");
     fgComment.classList.add("fg-comment");
-    fgComment.textContent = "67Neutral";
+    fgComment.textContent = "Neutral";
     fgValue.append(fgNum, fgComment);
     fgInfo.append(fgImgDiv, fgValue);
   fgSentiment.append(commonMrktHeaderFG, fgInfo);
 
 mrktOverview.append(mcDaily, mrktDom, fgSentiment);
   }catch(error) {
-	  console.error(error); 
+	  //console.error(error); 
   }
 }
-//getGlobalMetric();
+getGlobalMetric();
 
 
 //TRENDING COINS
@@ -292,6 +265,7 @@ async function getTrending(){
   const lazyTrendingBox = document.createElement('div');
   lazyTrendingBox.classList.add("lazy-trend-tag");
   lazyTrendingBox.innerHTML = `
+    <div class="lazy"></div>
     <div class="lazy"></div>
     <div class="lazy"></div>
     <div class="lazy"></div>
@@ -304,11 +278,7 @@ async function getTrending(){
     controller.abort()
   }, 5000)
   try{
-    const res = await fetch("https://api.coinranking.com/v2/coins/trending?timePeriod=1h&limit=4&tiers[]=2&tiers[]=3", {
-      headers:{
-      'x-access-token': 'coinranking86f7f6b674c68d00e691f169dcf49d8fa5df15aafd2476a2',
-      }
-    }, {signal});
+    const res = await fetch(`/api/trending-coins`, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
@@ -346,10 +316,10 @@ async function getTrending(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    console.log(err)
+    //console.log(err)
   }
 }
-//getTrending();
+getTrending();
 
 
 //TOP COINS
@@ -381,7 +351,7 @@ async function getTopCoins(){
     controller.abort()
   }, 5000)
   try{
-    const res = await fetch(`https://api.coinlore.com/api/tickers/?start=0&limit=10`, {signal});
+    const res = await fetch(`/api/top-coins`, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
@@ -435,7 +405,7 @@ async function getTopCoins(){
     }
   }
 }
-//getTopCoins();
+getTopCoins();
 
 
 //NEWS
@@ -468,7 +438,7 @@ async function cryptoNews(){
     controller.abort()
   }, 5000);
   try{
-    const res = await fetch(newsDataAPI, {signal});
+    const res = await fetch(`/api/news`, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
@@ -530,7 +500,7 @@ async function cryptoNews(){
     //console.log(err);
   }
 }
-//cryptoNews();
+cryptoNews();
 
 
 //REFRESH BUTTON
@@ -544,154 +514,3 @@ refreshBtn.addEventListener("click", ()=>{
     refreshBtn.querySelector(".refresh-icon").classList.remove("refresh-load");
   }, 1500)
 })
-
-
-
-
-
-
-
-
-
-
-
-// searchBtn.addEventListener("click",()=>{
-//   let innit = searchbar.value;
-//   fetch(`${cd_url}search_string=${innit}&limit=10`,{
-//     method:"GET",
-//     headers:{
-//       "Authorization": `Bearer ${cd_apiKey}`,
-//       "Content-Type": "application.json"
-//     }
-//   })
-//   .then((res)=>res.json())
-//   .then((data)=>console.log(data))
-//   .catch((err)=>console.log(err))
-// })
-
-
-// async function raCoins(){
-// //   // const controller = new AbortController();
-// //   // const signal = controller.signal;
-// //   // const timeoutId = setTimeout(()=>{
-// //   //   controller.abort()
-// //   // }, 5000)
-// //       const url = 'https://crypto-tracker.p.rapidapi.com/api/recentlyadded';
-// //     const options = {
-// // 	    method: 'GET',
-// // 	    headers: {
-// // 		  'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
-// // 		  'x-rapidapi-host': 'crypto-tracker.p.rapidapi.com'
-// // 	    }
-// //     }
-// //   try{
-
-// //     const res = await fetch(url, options);
-// //     if(!res.ok){
-// //       throw new Error(`HTTP error! status code: ${res.status}`);
-// //     }
-// // 	  const data = await res.json();//res.text();
-// // 	  console.log(data)
-// //     data.result.forEach((item, index)=>{
-
-// //     })
-// //   }catch(err){
-// //     console.log(err)
-// //   }
-// // const url = 'https://cryptopricesapi-by-xcrypto.p.rapidapi.com/';
-// // const options = {
-// // 	method: 'GET',
-// // 	headers: {
-// // 		'x-rapidapi-key': 'd1a98a9ce2mshc6d3a6de72b33cfp1c8091jsneba9972e64c1',
-// // 		'x-rapidapi-host': 'cryptopricesapi-by-xcrypto.p.rapidapi.com'
-// // 	}
-// // };
-
-// // try {
-// // 	const response = await fetch(url, options);
-// // 	const result = await response.text();
-// // 	console.log(result);
-// // } catch (error) {
-// // 	console.error(error);
-// // }
-
-// }
-// // searchBtn.addEventListener("click", raCoins)
-
-
-
-// coinmarket cap api = "0b5c5dafd83b424f8dc9d5fc8774ef14"
-// //FEAR AND GREED INDEX
-// URL = "https://pro-api.coinmarketcap.com/v3/fear-and-greed/latest"
-// {
-// "data": {
-// "value ": 40,
-// "value_classification": "Neutral",
-// "update_time": "2024-09-19T02:54:56.017Z"
-// },
-// "status": {
-// "timestamp": "2025-11-08T09:42:16.469Z",
-// "error_code": 0,
-// "error_message": "",
-// "elapsed": 10,
-// "credit_count": 1,
-// "notice": ""
-// }
-// }
-
-
-
-// //COIN META DATA
-// URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info"
-// {
-// "data": {
-// "1": {
-// "urls": {
-// "website": [
-// "https://bitcoin.org/"
-// ],
-// "technical_doc": [
-// "https://bitcoin.org/bitcoin.pdf"
-// ],
-// "twitter": [ ],
-// "reddit": [
-// "https://reddit.com/r/bitcoin"
-// ],
-// "message_board": [
-// "https://bitcointalk.org"
-// ],
-// "announcement": [ ],
-// "chat": [ ],
-// "explorer": [
-// "https://blockchain.coinmarketcap.com/chain/bitcoin",
-// "https://blockchain.info/",
-// "https://live.blockcypher.com/btc/"
-// ],
-// "source_code": [
-// "https://github.com/bitcoin/"
-// ]
-// },
-// "logo": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
-// "id": 1,
-// "name": "Bitcoin",
-// "symbol": "BTC",
-// "slug": "bitcoin",
-// "description": "Bitcoin (BTC) is a consensus network that enables a new payment system and a completely digital currency. Powered by its users, it is a peer to peer payment network that requires no central authority to operate. On October 31st, 2008, an individual or group of individuals operating under the pseudonym "Satoshi Nakamoto" published the Bitcoin Whitepaper and described it as: "a purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution."",
-// "date_added": "2013-04-28T00:00:00.000Z",
-// "date_launched": "2013-04-28T00:00:00.000Z",
-// "tags": [
-// "mineable"
-// ],
-// "platform": null,
-// "category": "coin"
-// },
-
-
-//SEARCH
-  // const fragment = document.createDocumentFragment();
-    // for(let i=0;i<3;i++){
-    //   const lazyTrendingBox = document.createElement("div");
-    //   lazyTrendingBox.classList.add("lazy");
-    //   fragment.append(lazyTrendingBox);   
-    // }
-    //trendingDiv.append(fragment);
