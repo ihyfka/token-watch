@@ -23,6 +23,9 @@ NEWS_DATA_URL = process.env.NEWS_DATA_URL;
 
 app.use(cors()); // Middleware to allow cross-origin requests from your frontend site
 app.use(express.json()); // Middleware to parse JSON bodies if your proxy needed to handle POST requests
+app.get('/', (req, res) => {
+  res.send('Server is peak');
+});
 
 //Search
 app.get('/api/search', async(req, res) => {
