@@ -30,6 +30,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+//"Warming"
+app.get('/health', (req, res) =>{
+  res.status(200).json({status: 'ok', timestamp: new Date()});
+})
+
+
 //Search
 app.get('/api/search', async(req, res) => {
   try{
