@@ -35,7 +35,6 @@ app.get('/health', (req, res) =>{
   res.status(200).json({status: 'ok', timestamp: new Date()});
 })
 
-
 //Search
 app.get('/api/search', async(req, res) => {
   try{
