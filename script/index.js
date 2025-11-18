@@ -290,7 +290,7 @@ mrktOverview.append(mcDaily, mrktDom, fgSentiment);
 //TRENDING COINS
 async function getTrending(){
   const lazyTrendingBox = document.createElement('div');
-  lazyTrendingBox.classList.add("lazy-tag");
+  lazyTrendingBox.classList.add("lazy-trend-tag");
   lazyTrendingBox.innerHTML = `
     <div class="lazy"></div>
     <div class="lazy"></div>
@@ -312,7 +312,7 @@ async function getTrending(){
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
-      const lazyTrendingBox = document.querySelector(".lazy-tag");
+      const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
         if (lazyTrendingBox) {
           lazyTrendingBox.remove();
       }
@@ -346,8 +346,6 @@ async function getTrending(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    
-  
     console.log(err)
   }
 }
@@ -387,7 +385,6 @@ async function getTopCoins(){
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
-      const lazyCoinBoxes = document.querySelector(".lazy-tag");
       if (lazyCoinBoxesBox) {
         lazyCoinBoxesBox.remove();
       }
@@ -421,23 +418,50 @@ async function getTopCoins(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    console.log(err);
-  }finally{
-    if (lazyCoinBoxesBox) {
-      lazyCoinBoxesBox.remove();
-    }
     const fetchErr = document.createElement("div");
     fetchErr.classList.add("fetch-err");
     fetchErr.textContent = "Error! Unable to fetch coin metrics.";
     topCoinsBoxesBox.append(fetchErr);
+    if(fetchErr){
+      fetchErr.addEventListener("click", ()=>{
+        topCoinsBoxesBox.innerHTML = "";
+        getTopCoins();
+      })
+    }
+    //console.log(err);
+  }finally{
+    if (lazyCoinBoxesBox) {
+      lazyCoinBoxesBox.remove();
+    }
   }
 }
-getTopCoins();
-    
+//getTopCoins();
+
 
 //NEWS
 const newsDiv = document.querySelector(".news");
 async function cryptoNews(){
+  const lazyNews = document.createElement('div');
+  lazyNews.classList.add("lazy-news");  
+  const fragment = document.createDocumentFragment();
+  for(let e=0;e<7;e++){
+    const lazyArticle = document.createElement("div");
+    lazyArticle.classList.add("lz-art");
+    const lazyNewsImg = document.createElement("div");
+    lazyNewsImg.classList.add("art-img-lz", "coin-framework");    
+    const div = document.createElement("div");
+    div.classList.add("div");
+    const lazyArtTitle = document.createElement("div");
+    lazyArtTitle.classList.add("art-title", "coin-framework");
+    const lazyArtDesc = document.createElement("div");
+    lazyArtDesc.classList.add("art-desc", "coin-framework");
+    div.append(lazyArtTitle, lazyArtDesc);
+    lazyArticle.append(lazyNewsImg, div);
+    fragment.append(lazyArticle);   
+  }
+  lazyNews.append(fragment);
+  newsDiv.appendChild(lazyNews);
+    
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -447,49 +471,62 @@ async function cryptoNews(){
     const res = await fetch(newsDataAPI, {signal});
     if(!res.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
+    }else{
+      if(lazyNews){
+        lazyNews.remove();
+      }
+      refreshBtn.style.display = "flex";
+      const data = await res.json();
+      data.results.forEach((item, index) => {
+        const article = document.createElement("div");
+        const auth = document.createElement("div");
+        const articleDivChild2 = document.createElement("div");
+        const newsImg = document.createElement("img");
+        const artTitle = document.createElement("div");
+        const artDesc = document.createElement("div");
+        const published = document.createElement("div");
+        article.classList.add("article");
+        auth.classList.add("auth");
+        newsImg.classList.add("auth-img");
+        newsImg.src = data.results[index].image_url;
+        newsImg.onerror = "this.onerror=null; this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';";
+        artTitle.classList.add("article-title");
+        artTitle.textContent = data.results[index].title;
+        artDesc.classList.add("article-desc");
+        artDesc.textContent = data.results[index].description;
+        published.classList.add("time-published");
+        const utcDate = new Date((`${data.results[index].pubDate}Z`));
+        const publishedDate = new Intl.DateTimeFormat("en-US", {
+          timeZone: "Africa/Lagos",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false
+        }).format(utcDate).replace(",", " ").replace(/\//g,"-");
+        published.textContent = `${publishedDate}  UTC+1`;
+        auth.append(newsImg);
+        articleDivChild2.append(artTitle, artDesc, published);
+        article.append(auth, articleDivChild2);
+        newsDiv.append(article);
+      })
     }
-    const data = await res.json();
-    data.results.forEach((item, index) => {
-      const article = document.createElement("div");
-      const auth = document.createElement("div");
-      const articleDivChild2 = document.createElement("div");
-      const newsImg = document.createElement("img");
-      const artTitle = document.createElement("div");
-      const artDesc = document.createElement("div");
-      const published = document.createElement("div");
-      article.classList.add("article");
-      auth.classList.add("auth");
-      newsImg.classList.add("auth-img");
-      newsImg.src = data.results[index].image_url;
-      newsImg.onerror = "this.onerror=null; this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';";
-      artTitle.classList.add("article-title");
-      artTitle.textContent = data.results[index].title;
-      artDesc.classList.add("article-desc");
-      artDesc.textContent = data.results[index].description;
-      published.classList.add("time-published");
-      const utcDate = new Date((`${data.results[index].pubDate}Z`));
-      const publishedDate = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Africa/Lagos",
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }).format(utcDate).replace(",", " ").replace(/\//g,"-");
-      published.textContent = `${publishedDate}  UTC+1`;
-      auth.append(newsImg);
-      articleDivChild2.append(artTitle, artDesc, published);
-      article.append(auth, articleDivChild2);
-      newsDiv.append(article);
-    })
   }catch(err){
     clearTimeout(timeoutId);
+    if(lazyNews){
+        lazyNews.remove();
+      }
     fetchErr.classList.add("fetch-err");
     fetchErr.textContent = "Error! Unable to fetch news data.";
     newsDiv.append(fetchErr);
-    refreshBtn.style.display = "flex";
+    if(fetchErr){
+      fetchErr.addEventListener("click", ()=>{
+        newsDiv.innerHTML = "";
+        cryptoNews();
+      })
+    }
     //console.log(err);
   }
 }
@@ -505,7 +542,7 @@ refreshBtn.addEventListener("click", ()=>{
   setTimeout(()=>{
     refreshBtn.querySelector("span").textContent = "Refresh";
     refreshBtn.querySelector(".refresh-icon").classList.remove("refresh-load");
-  }, 2500)
+  }, 1500)
 })
 
 

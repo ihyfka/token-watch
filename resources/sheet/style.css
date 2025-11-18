@@ -30,6 +30,7 @@ html{
   --tab-color:#CCC;
   --tab-hover:#EEE;
   --article-desc:#DDD;
+  --lz-news-bottom:#EEFFEE44;
 }
  .light{
   --bg:#FFFE;
@@ -51,7 +52,8 @@ html{
   --err-msg:#FF6B81;
   --tab-color:#555;
   --tab-hover:#2F2F2F;
-  --article-desc:#555; 
+  --article-desc:#555;
+  --lz-news-bottom:#09091A50;
 } 
 body{
   background:var(--bg);
@@ -523,7 +525,6 @@ nav{
 .lazy-tag{
   display:flex;
   flex-wrap:nowrap;
-  margin-top:2rem;
   width:100%;
   align-items:center;
   overflow-x:auto;
@@ -547,9 +548,9 @@ nav{
   background:var(--sidebar-bg);
 }
 .coin-framework{
-  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 18%, var(--modal-bg) 33%);
+  background:linear-gradient(120deg, var(--modal-bg) 8%, var(--sidebar-bg) 30%, var(--modal-bg) 45%);
   background-size:200% 100%;
-  animation: shimmer 2.5s infinite ease;
+  animation: shimmer 2s infinite ease;
 }
 .lazycoins > p:nth-child(1){
   margin-bottom:3%;
@@ -573,9 +574,9 @@ nav{
 }
 @keyframes shimmer{
    from{
-    background-position:-120% 0;
+    background-position:-100% 0;
   }to{
-    background-position:120% 0;
+    background-position:100% 0;
   }
 }
 .topcoins-modal-head{
@@ -644,7 +645,7 @@ nav{
   font-weight:550;
 }
 .news{
-  margin-top:2rem;
+  margin:2rem 0 1rem;
   background:var(--sidebar-bg);
   border-radius:10px;
 }
@@ -670,6 +671,42 @@ nav{
 .article:hover{
   background:var(--modal-bg);
   border-radius:10px;
+}
+.lz-art{
+  display:flex;
+  padding:1.5rem 1rem 2rem;
+  flex-wrap:nowrap;
+  align-items:center;
+  max-width:100%;
+  border-bottom:1px solid var(--lz-news-bottom);
+  background:none;
+}
+.lazy-news > div:last-child{
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+}
+.art-img-lz{
+  margin:0 3% 1rem 0;
+  width:25rem;
+  height:15rem;
+  max-width:100%;
+  border-radius:10px;
+}
+.lz-art .div{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+}
+.art-title{
+  margin-bottom:2%;
+  height:2.7rem;
+  border-radius:10px;
+  max-width:50%;
+}
+.art-desc{
+  height:2rem;
+  border-radius:10px;
+  max-width:85%;
 }
 .auth-img{
   margin:0 1.3rem 1rem 0;
@@ -768,7 +805,7 @@ nav{
     position:sticky;
     top:0;
     margin-bottom:3rem;
-    padding:.3rem 0 .7rem;
+    padding:0 0 .7rem;
     background:var(--bg);
   }
   .tab-switch{
@@ -844,6 +881,12 @@ nav{
     display:flex;
     flex-direction:column;
     justify-content: center;
+  }
+  .lz-art{
+    flex-direction:column;
+  }
+  .art-img-lz{
+    justify-items:baseline;
   }
   .article-desc{
     -webkit-line-clamp:1;
