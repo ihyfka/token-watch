@@ -179,8 +179,11 @@ async function getGlobalMetric(){
     controller.abort()
   }, 5000)
   try{
-    const res = await fetch(`/api/global-metrics`, {signal});
-	  const data = await res.json();
+    const gbRes = await fetch(`/api/global-metrics`, {signal});
+    const fgRes = await fetch(`/api/fear-greed-index`, {signal});
+
+    //mcap
+	  const gbData = await gbRes.json();
 	  const mcDaily = document.createElement("div");
     mcDaily.classList.add("daily-mc");
     mcDaily.setAttribute("title", "The total value of all outstanding shares or cryptocurrency coins in circulation.");
@@ -195,13 +198,13 @@ async function getGlobalMetric(){
       notation: "compact",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format((Math.round((data.body.market_cap) *100) /100));
+    }).format((Math.round((gbData.body.market_cap) *100) /100));
     const mcChange = document.createElement("p");
     mcChange.classList.add("mc-change");
-    mcChange.textContent = (Math.round((data.body.market_cap_change) *100) /100) + "%";
+    mcChange.textContent = (Math.round((gbData.body.market_cap_change) *100) /100) + "%";
     const mcChangeUp = `<svg fill="var(--bullish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"/></svg>`;
     const mcChangeDown = `<svg fill="var(--bearish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"/></svg>`;
-    if(Math.sign((Math.round((data.body.market_cap_change) *100) /100)) === 1){
+    if(Math.sign((Math.round((gbData.body.market_cap_change) *100) /100)) === 1){
       mcChange.style.color = "var(--bullish)";
       mcChange.innerHTML += mcChangeUp;
     }else{
@@ -209,6 +212,9 @@ async function getGlobalMetric(){
       mcChange.innerHTML += mcChangeDown;
     }
     mcDaily.append(commonMrktHeaderMC, mcValue, mcChange);
+
+
+//dominance
     mrktDom.classList.add("mrk-dom");
     mrktDom.setAttribute("title", "Market dominance metrics measure an asset's percentage share of the total market.");
     const commonMrktHeaderMD = document.createElement("span");
@@ -216,17 +222,17 @@ async function getGlobalMetric(){
     commonMrktHeaderMD.textContent = "Dominance";
     const btcDom = document.createElement("span");
     btcDom.classList.add("btc-dom");
-    btcDom.textContent = `BTC:   ${(Math.round((data.body.btc_dominance) *100) /100)}%`;
+    btcDom.textContent = `BTC:   ${(Math.round((gbData.body.btc_dominance) *100) /100)}%`;
     const ethDom = document.createElement("span");
     ethDom.classList.add("eth-dom");
-    ethDom.textContent = `ETH:   ${(Math.round((data.body.eth_dominance) *100) /100)}%`;
+    ethDom.textContent = `ETH:   ${(Math.round((gbData.body.eth_dominance) *100) /100)}%`;
     mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
-  }catch(error) {
-	  //console.error(error); 
-  } 
-  try{
-    const res = await fetch(`/api/fear-greed-index`, {signal});
-    const data = await res.json();
+
+
+
+//fear and greed
+
+    const fgData = await fgRes.json();
     fgSentiment.classList.add("fg-sentiment");
     fgSentiment.setAttribute("title", "The Index registers investor sentiment on a 0 (extreme fear) to 100 (extreme greed) scale.");
     const commonMrktHeaderFG = document.createElement("span");
@@ -250,16 +256,16 @@ async function getGlobalMetric(){
     fgValue.classList.add("fear-greed-value");
     const fgNum = document.createElement("span");
     fgNum.classList.add("fg-number");
-    fgNum.textContent = data.data.value;
+    fgNum.textContent = fgData.data.value;
     const fgComment = document.createElement("p");
     fgComment.classList.add("fg-comment");
-    fgComment.textContent = data.data.value_classification;
+    fgComment.textContent = fgData.data.value_classification;
     fgValue.append(fgNum, fgComment);
     fgInfo.append(fgImgDiv, fgValue);
     fgSentiment.append(commonMrktHeaderFG, fgInfo);
 mrktOverview.append(mcDaily, mrktDom, fgSentiment);
   }catch(error) {
-	  //console.error(error); 
+	  console.error(error); 
   }
 }
 getGlobalMetric();
