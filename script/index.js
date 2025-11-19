@@ -220,12 +220,10 @@ async function getGlobalMetric(){
     const ethDom = document.createElement("span");
     ethDom.classList.add("eth-dom");
     ethDom.textContent = `ETH:   ${(Math.round((data.body.eth_dominance) *100) /100)}%`;
-    return mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
+    mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
   }catch(error) {
 	  //console.error(error); 
   } 
-  
-  
   try{
     const res = await fetch(`/api/fear-greed-index`, {signal});
     const data = await res.json();
