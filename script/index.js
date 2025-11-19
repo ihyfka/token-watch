@@ -177,7 +177,6 @@ const fgSentiment = document.createElement("div");
 async function getGlobalMetric(){
 
   const mcValue = document.createElement("span");
-
   const mcChange = document.createElement("p");
   const btcDom = document.createElement("span");
   const ethDom = document.createElement("span");
@@ -212,6 +211,8 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       throw new Error(`error code: ${res.status}`);
     }else{
       if(mrktOverview){
+        metricCovers.forEach(item => item.classList.add("lz-metric-covers"));
+        metricInfo.forEach(item => item.classList.remove("lz-metrics"));
         mrktOverview.innerHTML = "";
       }
 	    const gbData = await gbRes.json();
@@ -229,7 +230,7 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format((Math.round((gbData.body.market_cap) *100) /100));
-
+      //mcp
       mcChange.classList.add("mc-change");
       mcChange.textContent = (Math.round((gbData.body.market_cap_change) *100) /100) + "%";
       const mcChangeUp = `<svg fill="var(--bullish)" width="9px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19h18a1.002 1.002 0 0 0 .823-1.569l-9-13c-.373-.539-1.271-.539-1.645 0l-9 13A.999.999 0 0 0 3 19z"/></svg>`;
@@ -290,9 +291,11 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       mrktOverview.append(mcDaily, mrktDom, fgSentiment);
     }
   }catch(error){
-	  //console.error(error); 
+	  console.error(error); 
   }finally{
     if(mrktOverview){
+      metricCovers.forEach(item => item.classList.add("lz-metric-covers"));
+      metricInfo.forEach(item => item.classList.remove("lz-metrics"));
       mrktOverview.innerHTML = "";
     }
   }
