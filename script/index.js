@@ -170,6 +170,8 @@ navigator.onLine ? updatedInfo(): notUpdatedInfo();
 
 //GLOBAL METRICS
 const mrktOverview = document.querySelector("#market-overview");
+const mrktDom = document.createElement("div");
+const fgSentiment = document.createElement("div");
 async function getGlobalMetric(){
   const controller = new AbortController();
   const signal = controller.signal;
@@ -206,8 +208,7 @@ async function getGlobalMetric(){
       mcChange.style.color = "var(--bearish)";
       mcChange.innerHTML += mcChangeDown;
     }
-  mcDaily.append(commonMrktHeaderMC, mcValue, mcChange);
-    const mrktDom = document.createElement("div");
+    mcDaily.append(commonMrktHeaderMC, mcValue, mcChange);
     mrktDom.classList.add("mrk-dom");
     mrktDom.setAttribute("title", "Market dominance metrics measure an asset's percentage share of the total market.");
     const commonMrktHeaderMD = document.createElement("span");
@@ -219,8 +220,15 @@ async function getGlobalMetric(){
     const ethDom = document.createElement("span");
     ethDom.classList.add("eth-dom");
     ethDom.textContent = `ETH:   ${(Math.round((data.body.eth_dominance) *100) /100)}%`;
-  mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
-    const fgSentiment = document.createElement("div");
+    return mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
+  }catch(error) {
+	  //console.error(error); 
+  } 
+  
+  
+  try{
+    const res = await fetch(`/api/fear-greed-index`, {signal});
+    const data = await res.json();
     fgSentiment.classList.add("fg-sentiment");
     fgSentiment.setAttribute("title", "The Index registers investor sentiment on a 0 (extreme fear) to 100 (extreme greed) scale.");
     const commonMrktHeaderFG = document.createElement("span");
@@ -244,14 +252,13 @@ async function getGlobalMetric(){
     fgValue.classList.add("fear-greed-value");
     const fgNum = document.createElement("span");
     fgNum.classList.add("fg-number");
-    fgNum.textContent = "67";
+    fgNum.textContent = data.data.value;
     const fgComment = document.createElement("p");
     fgComment.classList.add("fg-comment");
-    fgComment.textContent = "Neutral";
+    fgComment.textContent = data.data.value_classification;
     fgValue.append(fgNum, fgComment);
     fgInfo.append(fgImgDiv, fgValue);
-  fgSentiment.append(commonMrktHeaderFG, fgInfo);
-
+    fgSentiment.append(commonMrktHeaderFG, fgInfo);
 mrktOverview.append(mcDaily, mrktDom, fgSentiment);
   }catch(error) {
 	  //console.error(error); 
@@ -449,6 +456,9 @@ async function cryptoNews(){
       const data = await res.json();
       data.results.forEach((item, index) => {
         const article = document.createElement("div");
+        article.addEventListener("click", ()=>{
+          window.open(data.results[index].link, "_blank", "noopener, noreferrer");
+        })
         const auth = document.createElement("div");
         const articleDivChild2 = document.createElement("div");
         const newsImg = document.createElement("img");

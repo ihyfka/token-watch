@@ -13,6 +13,8 @@ CD_API_KEY = process.env.CD_API_KEY;
 GLOBAL_METRICS_URL = process.env.GLOBAL_METRICS_URL;
 GLOBAL_METRICS_HOST = process.env.GLOBAL_METRICS_HOST;
 GLOBAL_METRICS_KEY = process.env.GLOBAL_METRICS_KEY;
+FEAR_AND_GREED_URL = process.env.FEAR_AND_GREED_URL;
+COIN_MARKET_CAP_API = process.env.COIN_MARKET_CAP_API;
 //GLOBAL METRICS
 TRENDING_COIN_URL = process.env.TRENDING_COIN_URL;
 TRENDING_ACCESS_TOKEN = process.env.TRENDING_ACCESS_TOKEN;
@@ -70,6 +72,20 @@ app.get('/api/global-metrics', async(req, res) => {
       params: req.query, //Getting query parameters from the client
     });
     // Sending the data received from API to frontend
+    res.json(apiResponse.data);
+  }catch (error){
+    console.error('Error proxying request:', error.message);
+    res.status(500).json({error: 'Internal Server Error' });
+  }
+});
+app.get('/api/fear-greed-index', async(req, res) => {
+  try{
+    const apiResponse = await axios.get(`${FEAR_AND_GREED_URL}`, {
+      headers: {
+        "X-CMC_PRO_API_KEY": `${COIN_MARKET_CAP_API}`,
+      },
+      params: req.query, 
+    });
     res.json(apiResponse.data);
   }catch (error){
     console.error('Error proxying request:', error.message);
