@@ -211,7 +211,7 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       throw new Error(`error code: ${res.status}`);
     }else{
       if(mrktOverview){
-        metricCovers.forEach(item => item.classList.add("lz-metric-covers"));
+        metricCovers.forEach(item => item.classList.remove("lz-metric-covers"));
         metricInfo.forEach(item => item.classList.remove("lz-metrics"));
         mrktOverview.innerHTML = "";
       }
@@ -294,9 +294,8 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
 	  console.error(error); 
   }finally{
     if(mrktOverview){
-      metricCovers.forEach(item => item.classList.add("lz-metric-covers"));
+      metricCovers.forEach(item => item.classList.remove("lz-metric-covers"));
       metricInfo.forEach(item => item.classList.remove("lz-metrics"));
-      mrktOverview.innerHTML = "";
     }
   }
 }
