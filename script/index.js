@@ -529,51 +529,18 @@ async function cryptoNews(){
         artDesc.classList.add("article-desc");
         artDesc.textContent = data.results[index].description;
         published.classList.add("time-published");
-        
-        
-const utcDate = new Date(`${data.results[index].pubDate}Z`);
-if (isNaN(utcDate.getTime())) {
-  console.error("Invalid date format for pubDate:", data.results[index].pubDate);
-} else {
-  const lagosTime = new Date(utcDate.toLocaleString("en-US", { timeZone: "Africa/Lagos" }));
-  const publishedDate = new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true
-  }).format(lagosTime).replace(",", "");
-
-  published.textContent = publishedDate;
-}
-
-        // const dateString = data.results[index].pubDate;
-        // const isoString = new Date(dateString).toISOString();//replace(' ', 'T') + 'Z';
-        // const utcDate = new Date(isoString);
-        // const publishedDate = new Date()("en-US", {
-        //   timeZone: "Africa/Lagos",
-        //   day: "2-digit",
-        //   month: "short",
-        //   year: "numeric",
-        //   hour: "numeric",
-        //   minute: "numeric",
-        //   second: "numeric",
-        //   hour12: true
-        // }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
-        // published.textContent = publishedDate;
-
-
-
-
-
-
-
-
-
-
-
+        const utcDate = new Date((`${data.results[index].pubDate}Z`));
+        const publishedDate = new Intl.DateTimeFormat("en-US", {
+          timeZone: "Africa/Lagos",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: true
+        }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
+        published.textContent = publishedDate;
         auth.append(newsImg);
         articleDivChild2.append(artTitle, artDesc, published);
         article.append(auth, articleDivChild2);
