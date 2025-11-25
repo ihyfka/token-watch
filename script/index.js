@@ -531,33 +531,34 @@ async function cryptoNews(){
         published.classList.add("time-published");
         
         
-// const utcDate = new Date((`${data.results[index].pubDate}Z`));
-//         const publishedDate = new Intl.DateTimeFormat("en-US", {
-//           timeZone: "Africa/Lagos",
-//           day: "2-digit",
-//           month: "short",
-//           year: "numeric",
-//           hour: "numeric",
-//           minute: "numeric",
-//           second: "numeric",
-//           hour12: true
-//         }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
-//         published.textContent = publishedDate;
+const utcDate = new Date((`${data.results[index].pubDate}Z`));
+const publishedDate = new Intl.DateTimeFormat("en-US", {
+  timeZone: "Africa/Lagos",
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: true
+}).format(utcDate).replace(",", "");
 
-        const dateString = data.results[index].pubDate;
-        const isoString = new Date(dateString).toISOString();//replace(' ', 'T') + 'Z';
-        const utcDate = new Date(isoString);
-        const publishedDate = new Intl.DateTimeFormat("en-US", {
-          timeZone: "Africa/Lagos",
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: true
-        }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
         published.textContent = publishedDate;
+
+        // const dateString = data.results[index].pubDate;
+        // const isoString = new Date(dateString).toISOString();//replace(' ', 'T') + 'Z';
+        // const utcDate = new Date(isoString);
+        // const publishedDate = new Date()("en-US", {
+        //   timeZone: "Africa/Lagos",
+        //   day: "2-digit",
+        //   month: "short",
+        //   year: "numeric",
+        //   hour: "numeric",
+        //   minute: "numeric",
+        //   second: "numeric",
+        //   hour12: true
+        // }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
+        // published.textContent = publishedDate;
 
 
 
