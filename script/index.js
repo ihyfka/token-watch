@@ -10,6 +10,7 @@ const trendingDiv = document.querySelector(".trending-block");
 const raDiv = document.querySelector(".recently-added-block");
 
 /* theme toggle */
+document.querySelector(".nav-notif").addEventListener("click", ()=>alert("You have no new notifications"))
 const theme = document.querySelector(".theme");
 const navLight = document.querySelector(".nav-light");
 const navDark = document.querySelector(".nav-dark");
@@ -307,27 +308,25 @@ async function getTrending(){
   const timeoutId = setTimeout(()=>{
     controller.abort()
   }, 5000)
+  let numSpan = document.createElement("span");
+  let trendingTokenImg = document.createElement("img");
+  let tokName = document.createElement("span");
+  let tokSymbol = document.createElement("span");
+  let trendingTokenVchange = document.createElement("div");
   try{
     const tRes = await fetch(`/api/trending-coins&tiers[]=2`, {signal});
     const rRes = await fetch(`/api/trending-coins&tiers[]=3`, {signal});
     if(!tRes.ok || !rRes.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
-      // const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
-      // const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
-        if (lazyTrendingBox || lazyRecentlyAddedBox){
-          lazyTrendingBox.remove();
-          lazyRecentlyAddedBox.remove();
-        }
+      if (lazyTrendingBox || lazyRecentlyAddedBox){
+        lazyTrendingBox.remove();
+        lazyRecentlyAddedBox.remove();
+      }
       const tData = await tRes.json();
       const rData = await rRes.json();
       tData.data.coins.forEach((item, index)=>{
         const topTrending = document.createElement("div");
-        numSpan = document.createElement("span");
-        trendingTokenImg = document.createElement("img");
-        tokName = document.createElement("span");
-        tokSymbol = document.createElement("span");
-        trendingTokenVchange = document.createElement("div");
         topTrending.classList.add("top-trending");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
@@ -350,11 +349,6 @@ async function getTrending(){
 
       rData.data.coins.forEach((item, index)=>{
         const raBlock = document.createElement("div");
-        numSpan = document.createElement("span");
-        trendingTokenImg = document.createElement("img");
-        tokName = document.createElement("span");
-        tokSymbol = document.createElement("span");
-        trendingTokenVchange = document.createElement("div");
         raBlock.classList.add("top-ra");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
