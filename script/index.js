@@ -88,7 +88,7 @@ async function advSearch(){
         searchResIcon.classList.add("search-res-icon");
         const searchImg = document.createElement("img");
         searchImg.src = data.Data.LIST[index].LOGO_URL;
-        searchImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
+        searchImg.onerror = ()=> searchImg.src='./resources/images/general-purpose-cover.png';
         searchResIcon.append(searchImg);
         const div = document.createElement("div");
         const searchResId = document.createElement("div");
@@ -308,11 +308,6 @@ async function getTrending(){
   const timeoutId = setTimeout(()=>{
     controller.abort()
   }, 5000)
-  let numSpan = document.createElement("span");
-  let trendingTokenImg = document.createElement("img");
-  let tokName = document.createElement("span");
-  let tokSymbol = document.createElement("span");
-  let trendingTokenVchange = document.createElement("div");
   try{
     const tRes = await fetch(`/api/trending-coins?timePeriod=1h&limit=4&tiers[]=1`, {signal});
     const rRes = await fetch(`/api/trending-coins?timePeriod=1h&limit=4&tiers[]=2`, {signal});
@@ -328,12 +323,17 @@ async function getTrending(){
       const tData = await tRes.json();
       const rData = await rRes.json();
       tData.data.coins.forEach((item, index)=>{
+        const numSpan = document.createElement("span");
+        const trendingTokenImg = document.createElement("img");
+        const tokName = document.createElement("span");
+        const tokSymbol = document.createElement("span");
+        const trendingTokenVchange = document.createElement("div");
         const topTrending = document.createElement("div");
         topTrending.classList.add("top-trending");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
         trendingTokenImg.src = tData.data.coins[index].iconUrl;
-        trendingTokenImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
+        trendingTokenImg.onerror = ()=> trendingTokenImg.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
         tokName.textContent = tData.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
@@ -350,12 +350,17 @@ async function getTrending(){
       })
 
       rData.data.coins.forEach((item, index)=>{
+        const numSpan = document.createElement("span");
+        const trendingTokenImg = document.createElement("img");
+        const tokName = document.createElement("span");
+        const tokSymbol = document.createElement("span");
+        const trendingTokenVchange = document.createElement("div");
         const raBlock = document.createElement("div");
         raBlock.classList.add("top-ra");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
         trendingTokenImg.src = rData.data.coins[index].iconUrl;
-        trendingTokenImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
+        trendingTokenImg.onerror = ()=> trendingTokenImg.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
         tokName.textContent = rData.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
@@ -427,7 +432,7 @@ async function getTopCoins(){
         const topCoinValueChange = document.createElement("p");
         const valueTimePeriod = document.createElement("span");
         topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png`;
-        topCoinBoxImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
+        topCoinBoxImg.onerror = ()=> topCoinBoxImg.src='./resources/images/general-purpose-cover.png';
         topCoinBoxName.textContent = data.data[index].name;
         topCoinBoxValue.textContent = "$" + data.data[index].price_usd;
         topCoinValueChange.textContent = data.data[index].percent_change_1h + "%";
@@ -518,7 +523,7 @@ async function cryptoNews(){
         auth.classList.add("auth");
         newsImg.classList.add("auth-img");
         newsImg.src = data.results[index].image_url;
-        newsImg.onerror = ()=> this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';
+        newsImg.onerror = ()=> newsImg.src='./resources/images/resolve-images-not-showing-problem-1.jpg';
         artTitle.classList.add("article-title");
         artTitle.textContent = data.results[index].title;
         artDesc.classList.add("article-desc");
