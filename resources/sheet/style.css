@@ -291,7 +291,7 @@ nav{
 
 #market-overview{
   display:grid;
-  grid-template-columns:minmax(10rem, .15fr) minmax(15rem, .3fr) minmax(13rem, .29fr);
+  grid-template-columns:minmax(10rem, .15fr) minmax(15rem, .3fr) minmax(14.3rem, .27fr);
   gap:2%;
   margin-bottom:5rem;
   align-items:center;
