@@ -96,7 +96,11 @@ app.get('/api/fear-greed-index', async(req, res) => {
 //Trending coins
 app.get('/api/trending-coins', async (req, res) => {
   try{
-    const apiResponse = await axios.get(`${TRENDING_COIN_URL}`, {
+    const url = new URL(TRENDING_COIN_URL);
+    for (const [key, value] of Object.entries(req.query)){
+      url.searchParams.append(key, value);
+    }
+    const apiResponse = await axios.get(url.toString, {
       headers: {
         "x-access-token": `${TRENDING_ACCESS_TOKEN}`
       },
