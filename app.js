@@ -108,26 +108,6 @@ app.get('/api/trending-coins', async (req, res) => {
     res.status(500).json({error: 'Internal Server Error' });
   }
 });
-//recently added
-app.get('/api/trending-coins', async (req, res) => {
-  try{
-    const apiResponse = await axios.get(`${TRENDING_COIN_URL}`, {
-      headers: {
-        "x-access-token": `${TRENDING_ACCESS_TOKEN}`
-      },
-      params: req.query,
-    });
-    res.json(apiResponse.data);
-  }catch(error){
-    console.error('Error proxying request:', error.message);
-    res.status(500).json({error: 'Internal Server Error' });
-  }
-});
-
-
-
-
-
 
 //Top coins
 app.get('/api/top-coins', async (req, res) => {
