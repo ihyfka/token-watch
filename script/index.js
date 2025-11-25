@@ -7,40 +7,33 @@ const topCoinsBoxesBox = document.querySelector(".topcoins-boxes");
 const refreshBtn = document.querySelector(".new-content");
 const fetchErr = document.createElement("div");
 const trendingDiv = document.querySelector(".trending-block");
+const raDiv = document.querySelector(".recently-added-block");
 
-//THEME TOGGLE
-const theme = document.querySelectorAll(".theme");
-const lightIcon = document.querySelector(".light-theme");
-const darkIcon = document.querySelector(".dark-theme");
+/* theme toggle */
+const theme = document.querySelector(".theme");
 const navLight = document.querySelector(".nav-light");
 const navDark = document.querySelector(".nav-dark");
 let getDarkmode = localStorage.getItem("darkMode");
 function launchDarkMode(){
   localStorage.setItem("darkMode", "true");
   document.body.classList.remove("light");
-  darkIcon.style.display = "none";
-  lightIcon.style.display = "inline-block";
   navLight.style.display = "inline-block";
   navDark.style.display = "none";
 }
 function launchLightMode(){
   localStorage.setItem("darkMode", "false");
   document.body.classList.add("light");
-  darkIcon.style.display = "inline-block";
-  lightIcon.style.display = "none";
   navLight.style.display = "none";
   navDark.style.display = "inline-block";
 }
 getDarkmode === "true" ? launchDarkMode(): launchLightMode();
-for(let i=0;i<theme.length;i++){
-  theme[i].addEventListener("click", ()=>{
-    getDarkmode = localStorage.getItem("darkMode");
-    getDarkmode !== "true" ? launchDarkMode(): launchLightMode();
-  })
-}
+theme.addEventListener("click", ()=>{
+  getDarkmode = localStorage.getItem("darkMode");
+  getDarkmode !== "true" ? launchDarkMode(): launchLightMode();
+})
 
 
-//SEARCH
+/* search */
 let isCIP = false;
 const navEntry = document.querySelector("#nav-entry");
 const searchResContainer = document.querySelector("#search-res-block");
@@ -148,7 +141,7 @@ cancelSearch.addEventListener("click", closeSearchModal);
 bodyOverlay.addEventListener("click", closeSearchModal);
 
 
-//LAST UPDATED
+/* last updated */
 const lastUpdated = document.querySelector(".last-update");
 function updatedInfo(){
   const timeNow = new Date().toLocaleString("en-US", {
@@ -168,14 +161,12 @@ function notUpdatedInfo(){
 navigator.onLine ? updatedInfo(): notUpdatedInfo();
 
 
-//GLOBAL METRICS
+/* global metrics */
 const mrktOverview = document.querySelector("#market-overview");
 const mcDaily = document.createElement("div");
 const mrktDom = document.createElement("div");
 const fgSentiment = document.createElement("div");
-
 async function getGlobalMetric(){
-
   const mcValue = document.createElement("span");
   const mcChange = document.createElement("p");
   const btcDom = document.createElement("span");
@@ -185,20 +176,16 @@ async function getGlobalMetric(){
   const fgValue = document.createElement("div");
   const fgNum = document.createElement("span");
   const fgComment = document.createElement("p");
-
 const metricCovers = [mcDaily, mrktDom, fgSentiment];
 metricCovers.forEach(item => item.classList.add("lz-metric-covers"));
 const metricInfo = [mcValue, mcChange, btcDom, ethDom, fgImgDiv, fgNum, fgComment];
 metricInfo.forEach(item => item.classList.add("lz-metrics"));
-
   mcDaily.append(mcValue, mcChange);
   mrktDom.append(btcDom, ethDom);
   fgValue.append(fgNum, fgComment);
   fgInfo.append(fgImgDiv, fgValue);
   fgSentiment.append(fgInfo);
   mrktOverview.append(mcDaily, mrktDom, fgSentiment);
-
-
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
@@ -221,7 +208,6 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       const commonMrktHeaderMC = document.createElement("span");
       commonMrktHeaderMC.classList.add("mrkt-sentiment-header");
       commonMrktHeaderMC.textContent = "Market cap";
-    
       mcValue.classList.add("mc-value");
       mcValue.textContent = new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -249,10 +235,8 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       const commonMrktHeaderMD = document.createElement("span");
       commonMrktHeaderMD.classList.add("mrkt-sentiment-header");
       commonMrktHeaderMD.textContent = "Dominance";
-    
       btcDom.classList.add("btc-dom");
       btcDom.textContent = `BTC:   ${(Math.round((gbData.body.btc_dominance) *100) /100)}%`;
-    
       ethDom.classList.add("eth-dom");
       ethDom.textContent = `ETH:   ${(Math.round((gbData.body.eth_dominance) *100) /100)}%`;
       mrktDom.append(commonMrktHeaderMD, btcDom, ethDom);
@@ -263,9 +247,7 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       const commonMrktHeaderFG = document.createElement("span");
       commonMrktHeaderFG.classList.add("mrkt-sentiment-header");
       commonMrktHeaderFG.textContent = "Fear & Greed";
-    
       fgInfo.classList.add("fear-greed-info");
-    
       fgImgDiv.classList.add("fg-img");
       const fgSvg = `
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 500 500" width="40" height="40">
@@ -277,12 +259,9 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
         </svg>
       `;
       fgImgDiv.innerHTML += fgSvg;
-    
       fgValue.classList.add("fear-greed-value");
-    
       fgNum.classList.add("fg-number");
       fgNum.textContent = fgData.data.value;
-    
       fgComment.classList.add("fg-comment");
       fgComment.textContent = fgData.data.value_classification;
       fgValue.append(fgNum, fgComment);
@@ -290,8 +269,8 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
       fgSentiment.append(commonMrktHeaderFG, fgInfo);
       mrktOverview.append(mcDaily, mrktDom, fgSentiment);
     }
-  }catch(error){
-	  console.error(error); 
+  }catch(err){
+	  //console.error(err); 
   }finally{
     if(mrktOverview){
       metricCovers.forEach(item => item.classList.remove("lz-metric-covers"));
@@ -302,17 +281,26 @@ metricInfo.forEach(item => item.classList.add("lz-metrics"));
 getGlobalMetric();
 
 
-//TRENDING COINS
+/* trending/recent coins */
 async function getTrending(){
   const lazyTrendingBox = document.createElement('div');
+  const lazyRecentlyAddedBox = document.createElement('div');
   lazyTrendingBox.classList.add("lazy-trend-tag");
+  lazyRecentlyAddedBox.classList.add("lazy-trend-tag");
   lazyTrendingBox.innerHTML = `
     <div class="lazy"></div>
     <div class="lazy"></div>
     <div class="lazy"></div>
     <div class="lazy"></div>
   `;
+  lazyRecentlyAddedBox.innerHTML = `
+    <div class="lazy"></div>
+    <div class="lazy"></div>
+    <div class="lazy"></div>
+    <div class="lazy"></div>
+  `;
   trendingDiv.appendChild(lazyTrendingBox);
+  raDiv.appendChild(lazyRecentlyAddedBox);
 
   const controller = new AbortController();
   const signal = controller.signal;
@@ -320,16 +308,19 @@ async function getTrending(){
     controller.abort()
   }, 5000)
   try{
-    const res = await fetch(`/api/trending-coins`, {signal});
-    if(!res.ok){
+    const tRes = await fetch(`/api/trending-coins&tiers[]=2`, {signal});
+    const rRes = await fetch(`/api/trending-coins&tiers[]=3`, {signal});
+    if(!tRes.ok || !rRes.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
       const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
-        if (lazyTrendingBox) {
+        if (lazyTrendingBox || lazyRecentlyAddedBox){
           lazyTrendingBox.remove();
-      }
-      const data = await res.json();
-      data.data.coins.forEach((item, index)=>{
+          lazyRecentlyAddedBox.remove();
+        }
+      const tData = await tRes.json();
+      const rData = await rRes.json();
+      tData.data.coins.forEach((item, index)=>{
         const topTrending = document.createElement("div");
         numSpan = document.createElement("span");
         trendingTokenImg = document.createElement("img");
@@ -339,21 +330,48 @@ async function getTrending(){
         topTrending.classList.add("top-trending");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
-        trendingTokenImg.src = data.data.coins[index].iconUrl;
+        trendingTokenImg.src = tData.data.coins[index].iconUrl;
         trendingTokenImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
         tokName.classList.add("token-name");
-        tokName.textContent = data.data.coins[index].name;
+        tokName.textContent = tData.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
-        tokSymbol.textContent = data.data.coins[index].symbol;
+        tokSymbol.textContent = tData.data.coins[index].symbol;
         trendingTokenVchange.classList.add("token-value");
-        trendingTokenVchange.textContent = data.data.coins[index].change + "%";
-        if(Math.sign(data.data.coins[index].change) === 1){
+        trendingTokenVchange.textContent = tData.data.coins[index].change + "%";
+        if(Math.sign(tData.data.coins[index].change) === 1){
           trendingTokenVchange.style.color = "var(--bullish)";
         }else{
           trendingTokenVchange.style.color = "var(--bearish)";
         }
       topTrending.append(numSpan, trendingTokenImg, tokName, tokSymbol, trendingTokenVchange);
       trendingDiv.append(topTrending);
+      })
+
+      rData.data.coins.forEach((item, index)=>{
+        const raBlock = document.createElement("div");
+        numSpan = document.createElement("span");
+        trendingTokenImg = document.createElement("img");
+        tokName = document.createElement("span");
+        tokSymbol = document.createElement("span");
+        trendingTokenVchange = document.createElement("div");
+        raBlock.classList.add("top-ra");
+        numSpan.classList.add("num");
+        numSpan.textContent = index + 1;
+        trendingTokenImg.src = rData.data.coins[index].iconUrl;
+        trendingTokenImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
+        tokName.classList.add("token-name");
+        tokName.textContent = rData.data.coins[index].name;
+        tokSymbol.classList.add("token-symbol");
+        tokSymbol.textContent = rData.data.coins[index].symbol;
+        trendingTokenVchange.classList.add("token-value");
+        trendingTokenVchange.textContent = rData.data.coins[index].change + "%";
+        if(Math.sign(rData.data.coins[index].change) === 1){
+          trendingTokenVchange.style.color = "var(--bullish)";
+        }else{
+          trendingTokenVchange.style.color = "var(--bearish)";
+        }
+      raBlock.append(numSpan, trendingTokenImg, tokName, tokSymbol, trendingTokenVchange);
+      raDiv.append(raBlock);
       })
     }
   }catch(err){
@@ -364,7 +382,7 @@ async function getTrending(){
 getTrending();
 
 
-//TOP COINS
+/* top coins */
 const topCoinsSection = document.querySelector("#topcoins");
 async function getTopCoins(){
   const lazyCoinBoxesBox = document.createElement('div');
@@ -473,7 +491,6 @@ async function cryptoNews(){
   }
   lazyNews.append(fragment);
   newsDiv.appendChild(lazyNews);
-    
   const controller = new AbortController();
   const signal = controller.signal;
   const timeoutId = setTimeout(()=>{
