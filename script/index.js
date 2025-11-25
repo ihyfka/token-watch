@@ -531,19 +531,23 @@ async function cryptoNews(){
         published.classList.add("time-published");
         
         
-const utcDate = new Date((`${data.results[index].pubDate}Z`));
-const publishedDate = new Intl.DateTimeFormat("en-US", {
-  timeZone: "Africa/Lagos",
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: true
-}).format(utcDate).replace(",", "");
+const utcDate = new Date(`${data.results[index].pubDate}Z`);
+if (isNaN(utcDate.getTime())) {
+  console.error("Invalid date format for pubDate:", data.results[index].pubDate);
+} else {
+  const lagosTime = new Date(utcDate.toLocaleString("en-US", { timeZone: "Africa/Lagos" }));
+  const publishedDate = new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  }).format(lagosTime).replace(",", "");
 
-        published.textContent = publishedDate;
+  published.textContent = publishedDate;
+}
 
         // const dateString = data.results[index].pubDate;
         // const isoString = new Date(dateString).toISOString();//replace(' ', 'T') + 'Z';
