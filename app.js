@@ -96,11 +96,7 @@ app.get('/api/fear-greed-index', async(req, res) => {
 //Trending coins
 app.get('/api/trending-coins', async (req, res) => {
   try{
-    const url = new URL(TRENDING_COIN_URL);
-    for (const [key, value] of Object.entries(req.query)){
-      url.searchParams.append(key, value);
-    }
-    const apiResponse = await axios.get(url.toString, {
+    const apiResponse = await axios.get(`${TRENDING_COIN_URL}`, {
       headers: {
         "x-access-token": `${TRENDING_ACCESS_TOKEN}`
       },
@@ -112,6 +108,7 @@ app.get('/api/trending-coins', async (req, res) => {
     res.status(500).json({error: 'Internal Server Error' });
   }
 });
+
 
 //Top coins
 app.get('/api/top-coins', async (req, res) => {

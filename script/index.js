@@ -314,8 +314,8 @@ async function getTrending(){
   let tokSymbol = document.createElement("span");
   let trendingTokenVchange = document.createElement("div");
   try{
-    const tRes = await fetch(`/api/trending-coins?tiers[]=2`, {signal});
-    const rRes = await fetch(`/api/trending-coins?tiers[]=3`, {signal});
+    const tRes = await fetch(`/api/trending-coins?timePeriod=1h&limit=4&tiers[]=1`, {signal});
+    const rRes = await fetch(`/api/trending-coins?timePeriod=1h&limit=4&tiers[]=2`, {signal});
     if(!tRes.ok || !rRes.ok){
       throw new Error(`HTTP error! status code: ${tRes.status, rRes.status}`);
     }else{
