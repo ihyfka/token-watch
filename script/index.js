@@ -88,7 +88,7 @@ async function advSearch(){
         searchResIcon.classList.add("search-res-icon");
         const searchImg = document.createElement("img");
         searchImg.src = data.Data.LIST[index].LOGO_URL;
-        searchImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';"
+        searchImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
         searchResIcon.append(searchImg);
         const div = document.createElement("div");
         const searchResId = document.createElement("div");
@@ -286,8 +286,8 @@ getGlobalMetric();
 async function getTrending(){
   const lazyTrendingBox = document.createElement('div');
   const lazyRecentlyAddedBox = document.createElement('div');
-  lazyTrendingBox.classList.add("lazy-trend-tag");
-  lazyRecentlyAddedBox.classList.add("lazy-trend-tag");
+  lazyTrendingBox.classList.add("lazy-trendbox-tag");
+  lazyRecentlyAddedBox.classList.add("lazy-rabox-tag");
   lazyTrendingBox.innerHTML = `
     <div class="lazy"></div>
     <div class="lazy"></div>
@@ -317,9 +317,11 @@ async function getTrending(){
     const tRes = await fetch(`/api/trending-coins&tiers[]=2`, {signal});
     const rRes = await fetch(`/api/trending-coins&tiers[]=3`, {signal});
     if(!tRes.ok || !rRes.ok){
-      throw new Error(`HTTP error! status code: ${res.status}`);
+      throw new Error(`HTTP error! status code: ${tRes.status, rRes.status}`);
     }else{
-      if (lazyTrendingBox || lazyRecentlyAddedBox){
+      const lzyTB = document.querySelector(".lazy-trendbox-tag");
+      const lzyRaB = document.querySelector(".lazy-rabox-tag");
+      if (lzyTB || lzyRaB){
         lazyTrendingBox.remove();
         lazyRecentlyAddedBox.remove();
       }
@@ -331,7 +333,7 @@ async function getTrending(){
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
         trendingTokenImg.src = tData.data.coins[index].iconUrl;
-        trendingTokenImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
+        trendingTokenImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
         tokName.textContent = tData.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
@@ -353,7 +355,7 @@ async function getTrending(){
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
         trendingTokenImg.src = rData.data.coins[index].iconUrl;
-        trendingTokenImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
+        trendingTokenImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
         tokName.textContent = rData.data.coins[index].name;
         tokSymbol.classList.add("token-symbol");
@@ -425,7 +427,7 @@ async function getTopCoins(){
         const topCoinValueChange = document.createElement("p");
         const valueTimePeriod = document.createElement("span");
         topCoinBoxImg.src = `./resources/images/${data.data[index].name}.png`;
-        topCoinBoxImg.onerror = "this.onerror=null; this.src='./resources/images/general-purpose-cover.png';";
+        topCoinBoxImg.onerror = ()=> this.src='./resources/images/general-purpose-cover.png';
         topCoinBoxName.textContent = data.data[index].name;
         topCoinBoxValue.textContent = "$" + data.data[index].price_usd;
         topCoinValueChange.textContent = data.data[index].percent_change_1h + "%";
@@ -516,7 +518,7 @@ async function cryptoNews(){
         auth.classList.add("auth");
         newsImg.classList.add("auth-img");
         newsImg.src = data.results[index].image_url;
-        newsImg.onerror = "this.onerror=null; this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';";
+        newsImg.onerror = ()=> this.src='./resources/images/resolve-images-not-showing-problem-1.jpg';
         artTitle.classList.add("article-title");
         artTitle.textContent = data.results[index].title;
         artDesc.classList.add("article-desc");
