@@ -313,7 +313,8 @@ async function getTrending(){
     if(!tRes.ok || !rRes.ok){
       throw new Error(`HTTP error! status code: ${res.status}`);
     }else{
-      const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
+      // const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
+      // const lazyTrendingBox = document.querySelector(".lazy-trend-tag");
         if (lazyTrendingBox || lazyRecentlyAddedBox){
           lazyTrendingBox.remove();
           lazyRecentlyAddedBox.remove();
