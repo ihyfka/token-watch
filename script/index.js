@@ -544,9 +544,6 @@ async function cryptoNews(){
 //         }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
 //         published.textContent = publishedDate;
 
-
-
-
         const isoString = new Date(data.results[index].pubDate).replace(' ', 'T') + 'Z';
         const utcDate = new Date(isoString);
         const publishedDate = new Intl.DateTimeFormat("en-US", {
@@ -591,7 +588,7 @@ async function cryptoNews(){
         cryptoNews();
       })
     }
-    //console.log(err);
+    console.log(err);
   }
 }
 cryptoNews();
