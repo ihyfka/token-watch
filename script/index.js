@@ -543,8 +543,8 @@ async function cryptoNews(){
 //           hour12: true
 //         }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
 //         published.textContent = publishedDate;
-
-        const isoString = new Date(data.results[index].pubDate).replace(' ', 'T') + 'Z';
+        const dateString = data.results[index].pubDate;
+        const isoString = new Date(dateString).replace(' ', 'T') + 'Z';
         const utcDate = new Date(isoString);
         const publishedDate = new Intl.DateTimeFormat("en-US", {
           timeZone: "Africa/Lagos",
