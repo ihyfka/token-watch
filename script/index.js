@@ -531,7 +531,24 @@ async function cryptoNews(){
         published.classList.add("time-published");
         
         
-        const utcDate = new Date((`${data.results[index].pubDate}Z`));
+// const utcDate = new Date((`${data.results[index].pubDate}Z`));
+//         const publishedDate = new Intl.DateTimeFormat("en-US", {
+//           timeZone: "Africa/Lagos",
+//           day: "2-digit",
+//           month: "short",
+//           year: "numeric",
+//           hour: "numeric",
+//           minute: "numeric",
+//           second: "numeric",
+//           hour12: true
+//         }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
+//         published.textContent = publishedDate;
+
+
+
+
+        const isoString = new Date(data.results[index].pubDate).replace(' ', 'T') + 'Z';
+        const utcDate = new Date(isoString);
         const publishedDate = new Intl.DateTimeFormat("en-US", {
           timeZone: "Africa/Lagos",
           day: "2-digit",
@@ -543,6 +560,17 @@ async function cryptoNews(){
           hour12: true
         }).format(utcDate).replace(",", " ").replace(/\//g,"-");     
         published.textContent = publishedDate;
+
+
+
+
+
+
+
+
+
+
+
         auth.append(newsImg);
         articleDivChild2.append(artTitle, artDesc, published);
         article.append(auth, articleDivChild2);
