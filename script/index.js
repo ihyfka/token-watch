@@ -332,15 +332,15 @@ async function getTrending(){
         topTrending.classList.add("top-trending");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
-        trendingTokenImg.src = tData.data.coins[index].iconUrl;
+        trendingTokenImg.src = tData.data.coins.coins[index].iconUrl;
         trendingTokenImg.onerror = ()=> trendingTokenImg.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
-        tokName.textContent = tData.data.coins[index].name;
+        tokName.textContent = tData.data.coins.coins[index].name;
         tokSymbol.classList.add("token-symbol");
-        tokSymbol.textContent = tData.data.coins[index].symbol;
+        tokSymbol.textContent = tData.data.coins.coins[index].symbol;
         trendingTokenVchange.classList.add("token-value");
-        trendingTokenVchange.textContent = tData.data.coins[index].change + "%";
-        if(Math.sign(tData.data.coins[index].change) === 1){
+        trendingTokenVchange.textContent = tData.data.coins.coins[index].change + "%";
+        if(Math.sign(tData.data.coins.coins[index].change) === 1){
           trendingTokenVchange.style.color = "var(--bullish)";
         }else{
           trendingTokenVchange.style.color = "var(--bearish)";
@@ -359,15 +359,15 @@ async function getTrending(){
         raBlock.classList.add("top-ra");
         numSpan.classList.add("num");
         numSpan.textContent = index + 1;
-        trendingTokenImg.src = rData.data.coins[index].iconUrl;
+        trendingTokenImg.src = rData.data.coins.coins[index].iconUrl;
         trendingTokenImg.onerror = ()=> trendingTokenImg.src='./resources/images/general-purpose-cover.png';
         tokName.classList.add("token-name");
-        tokName.textContent = rData.data.coins[index].name;
+        tokName.textContent = rData.data.coins.coins[index].name;
         tokSymbol.classList.add("token-symbol");
-        tokSymbol.textContent = rData.data.coins[index].symbol;
+        tokSymbol.textContent = rData.data.coins.coins[index].symbol;
         trendingTokenVchange.classList.add("token-value");
-        trendingTokenVchange.textContent = rData.data.coins[index].change + "%";
-        if(Math.sign(rData.data.coins[index].change) === 1){
+        trendingTokenVchange.textContent = rData.data.coins.coins[index].change + "%";
+        if(Math.sign(rData.data.coins.coins[index].change) === 1){
           trendingTokenVchange.style.color = "var(--bullish)";
         }else{
           trendingTokenVchange.style.color = "var(--bearish)";
