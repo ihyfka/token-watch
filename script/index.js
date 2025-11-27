@@ -114,7 +114,7 @@ async function advSearch(){
       searchResContainer.append(resNumDisp);
     }
   }catch(err){
-    //console.log(err);
+    console.log(err);
     isCIP = false;
   }finally{
     clearTimeout(timeoutId);
@@ -460,7 +460,7 @@ async function getTopCoins(){
         getTopCoins();
       })
     }
-    //console.log(err);
+    console.log(err);
   }finally{
     if (lazyCoinBoxesBox) {
       lazyCoinBoxesBox.remove();
