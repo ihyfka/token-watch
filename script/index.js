@@ -378,7 +378,7 @@ async function getTrending(){
     }
   }catch(err){
     clearTimeout(timeoutId);
-    //console.log(err)
+    console.log(err)
   }
 }
 getTrending();
@@ -470,7 +470,7 @@ async function getTopCoins(){
 getTopCoins();
 
 
-//NEWS
+/* news */
 const newsDiv = document.querySelector(".news");
 async function cryptoNews(){
   const lazyNews = document.createElement('div');
@@ -567,7 +567,7 @@ async function cryptoNews(){
 cryptoNews();
 
 
-//REFRESH BUTTON
+/* refresh */
 refreshBtn.addEventListener("click", ()=>{
   newsDiv.innerHTML = "";
   refreshBtn.querySelector("span").textContent = "Refreshing...";
