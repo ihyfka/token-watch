@@ -322,7 +322,7 @@ async function getTrending(){
       }
       const tData = await tRes.json();
       const rData = await rRes.json();
-      tData.data.coins.forEach((item, index)=>{
+      tData.data.coins.coins.forEach((item, index)=>{
         const numSpan = document.createElement("span");
         const trendingTokenImg = document.createElement("img");
         const tokName = document.createElement("span");
@@ -349,7 +349,7 @@ async function getTrending(){
       trendingDiv.append(topTrending);
       })
 
-      rData.data.coins.forEach((item, index)=>{
+      rData.data.coins.coins.forEach((item, index)=>{
         const numSpan = document.createElement("span");
         const trendingTokenImg = document.createElement("img");
         const tokName = document.createElement("span");
